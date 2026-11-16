@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore sports image classification with SportsVision AI, powered by a trained MobileNetV2 convolutional neural network.">
+  <meta name="theme-color" content="#102b25">
+  <title>SportsVision AI — See the sport. Understand the image.</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header shell">
+    <a class="brand" href="#" aria-label="SportsVision AI home"><span class="brand-mark" aria-hidden="true">S<span>↗</span></span>SportsVision <span class="ai-tag">AI</span></a>
+    <nav aria-label="Main navigation"><a href="#classifier">Classifier</a><a href="#how-it-works">How it works <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main class="shell">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="eyebrow"><span class="status-dot"></span> COMPUTER VISION. MEET THE GAME.</div>
+      <h1 id="hero-title">Every image.<br>A sport to <em>discover.</em></h1>
+      <p>From the court to the pitch. Upload a photo and let our neural network identify the sport, one pixel at a time.</p>
+      <div class="sport-tags" aria-label="Supported sports"><span>◉ Basketball</span><span>◈ Football</span><span>◎ Tennis</span></div>
+      <div class="hero-art" aria-hidden="true"><div class="court"><div class="court-center"></div><div class="court-box left"></div><div class="court-box right"></div></div><div class="scan-corner top"></div><div class="scan-corner bottom"></div><span class="art-label">VISION / 224 × 224</span><span class="art-coordinate">01 — IMAGE INTELLIGENCE</span></div>
+    </section>
+
+    <section id="classifier" class="workspace" aria-label="Image classifier">
+      <div class="upload-panel">
+        <div class="panel-heading"><h2><span class="step">01</span> Your image</h2><span class="small-label">START HERE</span></div>
+        <label class="dropzone" id="dropzone" for="file-input">
+          <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp">
+          <span id="upload-prompt" class="upload-prompt"><span class="upload-icon" aria-hidden="true">↥</span><strong>Drop your game here</strong><span>or <span class="browse-text">browse files</span> to upload</span><small>JPG, PNG or WebP · Up to 10 MB</small></span>
+          <img id="preview" alt="Selected sports image preview" hidden>
+          <span class="preview-overlay" id="preview-overlay" hidden>Choose a different image ↗</span>
+        </label>
+        <div class="file-meta"><span id="file-name">No image selected</span><button id="clear-button" type="button" hidden>Remove</button></div>
+        <button id="analyze-button" class="analyze-button" type="button" disabled><span id="button-label">Analyze Image</span><span id="button-icon" aria-hidden="true">↗</span></button>
+        <p class="upload-note">Your image is processed locally by this server and is not saved.</p>
+        <p id="error-message" class="error-message" role="alert" hidden></p>
+      </div>
+
+      <div class="results-panel" aria-busy="false" id="results-panel">
+        <div class="panel-heading"><h2><span class="step">02</span> The prediction</h2><span id="result-status" class="result-status">AWAITING IMAGE</span></div>
+        <div id="empty-state" class="empty-state"><span class="focus-icon" aria-hidden="true">⌖</span><h3>A new perspective on your game.</h3><p>Your prediction and class probabilities<br>will appear here after analysis.</p><span class="empty-line"></span><small>3 SPORTS · 1 NEURAL NETWORK</small></div>
+        <div id="prediction" hidden>
+          <div class="prediction-heading"><span class="small-label">PREDICTED SPORT</span><h3 id="predicted-sport"></h3><div class="confidence"><strong id="confidence"></strong><span>model confidence</span></div></div>
+          <div class="probability-heading"><h4>Class probabilities</h4><span>SOFTMAX OUTPUT</span></div>
+          <div id="probabilities"></div>
+          <p class="prediction-note">A model prediction, not a certainty. Images outside these three sports will still receive one of these labels.</p>
+        </div>
+        <div class="model-strip"><span class="status-dot"></span> MobileNetV2 <span>224 × 224 RGB</span></div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="explainer">
+      <div class="explainer-intro"><span class="eyebrow">BEHIND THE PREDICTION</span><h2>Trained to see<br>the bigger picture.</h2><p>A convolutional neural network turns visual patterns into a sports prediction.</p></div>
+      <article><span class="feature-number">01 / PREPARE</span><h3>A consistent canvas</h3><p>Your photo is oriented, converted to RGB, and resized to 224 × 224 pixels. The model’s built-in Rescaling layer handles normalization.</p></article>
+      <article><span class="feature-number">02 / RECOGNIZE</span><h3>A head start in vision</h3><p>MobileNetV2 transfer learning reuses learned visual features. Your trained classifier connects these patterns to basketball, football, and tennis.</p></article>
+      <article><span class="feature-number">03 / CLASSIFY</span><h3>More than a label</h3><p>A softmax layer returns a probability for every sport. The highest score becomes the prediction; the full breakdown stays visible.</p></article>
+    </section>
+  </main>
+  <footer class="shell"><span>SportsVision AI <span class="footer-dot">/</span> See beyond the pixels.</span><span>Built with TensorFlow & FastAPI</span></footer>
+</body>
+</html>

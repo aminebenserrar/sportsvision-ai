@@ -1,0 +1,68 @@
+[
+  {
+    "input": "football.jpg",
+    "http_status": 200,
+    "result": {
+      "predicted_sport": "football",
+      "confidence": 0.9118319749832153,
+      "probabilities": [
+        {
+          "sport": "basketball",
+          "probability": 0.06760580092668533
+        },
+        {
+          "sport": "football",
+          "probability": 0.9118319749832153
+        },
+        {
+          "sport": "tennis",
+          "probability": 0.020562201738357544
+        }
+      ]
+    }
+  },
+  {
+    "input": "basketball.jpg",
+    "http_status": 200,
+    "result": {
+      "predicted_sport": "basketball",
+      "confidence": 0.9895485639572144,
+      "probabilities": [
+        {
+          "sport": "basketball",
+          "probability": 0.9895485639572144
+        },
+        {
+          "sport": "football",
+          "probability": 0.003798465710133314
+        },
+        {
+          "sport": "tennis",
+          "probability": 0.00665300851687789
+        }
+      ]
+    }
+  },
+  {
+    "input": "tennis.jpg",
+    "http_status": 200,
+    "result": {
+      "predicted_sport": "tennis",
+      "confidence": 0.9179620742797852,
+      "probabilities": [
+        {
+          "sport": "basketball",
+          "probability": 0.07436802983283997
+        },
+        {
+          "sport": "football",
+          "probability": 0.007669932208955288
+        },
+        {
+          "sport": "tennis",
+          "probability": 0.9179620742797852
+        }
+      ]
+    }
+  }
+]

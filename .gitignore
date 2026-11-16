@@ -1,0 +1,11 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.env
+.pytest_cache/
+# Local environment and editor files are not part of the published project.
+.env.*
+!.env.example
+.idea/
+.vscode/
