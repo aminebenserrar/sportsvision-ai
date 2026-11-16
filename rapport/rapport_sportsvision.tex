@@ -235,27 +235,19 @@ Classes&3\\
 \end{table}
 La fonction de perte \emph{Sparse Categorical Crossentropy} convient aux étiquettes entières des trois classes. Le modèle est compilé, puis entraîné avec \texttt{model.fit(train\_ds, validation\_data=valid\_ds, epochs=10)}.
 \section{Évolution de l'entraînement}
-Une époque représente un parcours complet des 491 images d'entraînement. Avec un batch size de 16, une époque comporte 31 lots. Les valeurs suivantes proviennent de la sortie affichée lors de l'entraînement :
+Une époque représente un parcours complet des 491 images d'entraînement. Avec un batch size de 16, une époque comprend 31 lots. Les résultats relevés lors de l'entraînement montrent une progression de l'accuracy et une baisse de la perte : l'accuracy d'entraînement est passée d'environ 76,99\,\% à 100\,\%, et la loss d'environ 0,5741 à 0,0170 en dix époques. La précision de validation a atteint 100\,\% sur seulement 15 images. Les chiffres intermédiaires et les courbes exactes nécessiteraient l'historique complet d'entraînement et ne sont pas reconstitués ici.
 \begin{table}[H]\centering
-\caption{Résultats affichés lors des dix époques}
-\begin{tabular}{rrrrr}
+\caption{Indicateurs globaux relevés pendant l'entraînement}
+\begin{tabular}{lll}
 \toprule
-\textbf{Époque}&\textbf{Accuracy}&\textbf{Loss}&\textbf{Val. accuracy}&\textbf{Val. loss}\\
+\textbf{Indicateur}&\textbf{Début}&\textbf{Fin (époque 10)}\\
 \midrule
-1&0,7699&0,5741&1,0000&0,1011\\
-2&0,9857&0,1421&1,0000&0,0301\\
-3&0,9919&0,0848&1,0000&0,0150\\
-4&0,9959&0,0593&1,0000&0,0102\\
-5&1,0000&0,0456&1,0000&0,0080\\
-6&1,0000&0,0365&1,0000&0,0057\\
-7&1,0000&0,0287&1,0000&0,0051\\
-8&1,0000&0,0234&1,0000&0,0040\\
-9&1,0000&0,0195&1,0000&0,0034\\
-10&1,0000&0,0170&1,0000&0,0030\\
+Accuracy d'entraînement&environ 76,99\,\%&100\,\%\\
+Loss d'entraînement&environ 0,5741&environ 0,0170\\
+Accuracy de validation&---&100\,\%\\
 \bottomrule
 \end{tabular}
 \end{table}
-L'exactitude affichée progresse rapidement, tandis que les pertes d'entraînement et de validation diminuent. La valeur de validation de 100\,\% reste à interpréter à la lumière des 15 images seulement.
 \section{Évaluation finale}
 L'évaluation finale sur le jeu de test a produit :
 \begin{equation}
