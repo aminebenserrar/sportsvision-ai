@@ -1,0 +1,484 @@
+\documentclass[12pt,a4paper,oneside]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{amsmath,amssymb}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\geometry{left=2.7cm,right=2.5cm,top=2.7cm,bottom=2.6cm}
+\definecolor{marine}{HTML}{173B34}
+\definecolor{vert}{HTML}{137660}
+\definecolor{pale}{HTML}{F0F6F3}
+\definecolor{graytext}{HTML}{555555}
+\hypersetup{colorlinks=true,linkcolor=marine,urlcolor=vert,pdftitle={Rapport SportsVision AI},pdfauthor={Projet Deep Learning}}
+\titleformat{\chapter}[display]{\normalfont\bfseries\color{marine}}{\Large Chapitre \thechapter}{0.35cm}{\Huge}
+\titleformat{\section}{\Large\bfseries\color{marine}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{vert}}{\thesubsection}{0.7em}{}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+\setstretch{1.16}
+\setlist[itemize]{itemsep=0.2em,leftmargin=1cm}
+\captionsetup{font=small,labelfont=bf}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small SportsVision AI}
+\fancyhead[R]{\small Projet Deep Learning}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,backgroundcolor=\color{pale},showstringspaces=false,columns=fullflexible,keywordstyle=\color{vert},commentstyle=\color{graytext}}
+\newcommand{\photo}[3][0.94]{%
+\begin{figure}[H]\centering
+\IfFileExists{../report_screenshots/#2}{\includegraphics[width=#1\textwidth,height=0.70\textheight,keepaspectratio]{../report_screenshots/#2}}{\fbox{\parbox{0.8\textwidth}{Capture : \texttt{\detokenize{#2}}}}}
+\caption{#3}
+\end{figure}}
+\begin{document}
+\begin{titlepage}
+\centering
+\vspace*{1.2cm}
+{\color{vert}\rule{\textwidth}{1.8pt}}\par
+\vspace{1.2cm}
+{\Large \textbf{Établissement : à compléter}}\par
+\vspace{0.45cm}
+{\large Filière : Informatique \quad $\vert$ \quad Module : Deep Learning}\par
+\vspace{2cm}
+{\Huge\bfseries\color{marine} SportsVision AI}\par
+\vspace{0.55cm}
+{\LARGE Classification automatique des images sportives}\par
+\vspace{0.3cm}
+{\Large Par réseau de neurones convolutif et transfert d'apprentissage}\par
+\vspace{1.4cm}
+\begin{tikzpicture}
+\node[draw=vert,fill=pale,rounded corners=6pt,inner sep=17pt,align=center,text width=10.7cm]{\Large\textbf{MobileNetV2}\\[6pt]\normalsize TensorFlow / Keras \quad $\bullet$ \quad FastAPI \quad $\bullet$ \quad Web responsive};
+\end{tikzpicture}
+\vfill
+\begin{tabular}{rl}
+\textbf{Réalisé par :} & Amine Bensserrar\\
+\textbf{Encadré par :} & À compléter\\
+\textbf{Année universitaire :} & 2026--2027
+\end{tabular}\par
+\vspace{1.2cm}
+{\color{vert}\rule{\textwidth}{1.8pt}}
+\end{titlepage}
+
+\pagenumbering{roman}
+\chapter*{Résumé}
+\addcontentsline{toc}{chapter}{Résumé}
+Le projet \textbf{SportsVision AI} propose un système intelligent de classification de photographies sportives. Il combine l'entraînement d'un réseau de neurones convolutif dans Google Colab et le développement d'une application web accessible depuis un navigateur. L'utilisateur choisit une image, puis l'application indique s'il s'agit de basketball, de football ou de tennis et affiche les probabilités associées.
+
+Le modèle repose sur \textbf{MobileNetV2}, pré-entraîné sur ImageNet et adapté par \emph{Transfer Learning}. L'ensemble d'entraînement contient 491 images ; les ensembles de validation et de test comportent chacun 15 images. Après dix époques, le modèle a classifié correctement les 15 images de test, soit une exactitude de 100\,\%, avec une perte de 0,0215. Ce résultat est encourageant, mais ne prouve pas une fiabilité générale de 100\,\% : l'échantillon de test est très limité.
+
+L'application utilise un serveur \textbf{FastAPI}, le modèle sauvegardé au format Keras ainsi qu'un frontend développé en HTML, CSS et JavaScript. Une API traite les images téléversées, exécute l'inférence et transmet les résultats au navigateur. Des captures réelles de l'application illustrent l'interface, le processus d'upload et les prédictions obtenues.
+
+\textbf{Mots-clés :} Deep Learning ; CNN ; classification d'images ; MobileNetV2 ; Transfer Learning ; TensorFlow ; FastAPI.
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+SportsVision AI is an image-classification project combining a convolutional neural network with a browser-based interface. A pretrained MobileNetV2 backbone is reused through transfer learning for three sports: basketball, football and tennis. The model was trained on 491 images, with 15 validation and 15 test images. It correctly classified all 15 test images, although such a small set does not establish its general accuracy. The deployed application uses FastAPI and TensorFlow/Keras to preprocess uploaded images and return class probabilities through a responsive user interface.
+
+\tableofcontents
+\listoffigures
+\listoftables
+\clearpage
+\pagenumbering{arabic}
+
+\chapter{Introduction générale}
+\section{Contexte}
+La vision par ordinateur est une branche de l'intelligence artificielle qui cherche à extraire des informations pertinentes à partir de données visuelles. Les réseaux de neurones convolutifs (CNN, pour \emph{Convolutional Neural Networks}) permettent d'apprendre directement à partir des pixels, sans programmer manuellement toutes les règles de reconnaissance.
+
+La classification de sports à partir de photographies est un cas d'utilisation intéressant. Une image peut montrer un terrain, un ballon, une raquette, des joueurs ou des mouvements caractéristiques. En revanche, les conditions de prise de vue, l'arrière-plan et la diversité des scènes rendent l'identification automatique moins triviale qu'une simple recherche de couleur ou de forme.
+\section{Problématique}
+Comment développer un système capable de reconnaître automatiquement la discipline sportive représentée dans une image, puis de proposer une interface simple pour effectuer cette classification ?
+\section{Objectifs}
+Ce projet poursuit quatre objectifs complémentaires :
+\begin{itemize}
+\item préparer des données d'apprentissage pour les classes basketball, football et tennis ;
+\item exploiter un CNN pré-entraîné afin d'obtenir un classifieur avec des ressources limitées ;
+\item évaluer les prédictions sur des données séparées de l'entraînement ;
+\item intégrer le modèle dans une application web permettant l'upload d'images et la consultation des résultats.
+\end{itemize}
+\section{Démarche}
+Le travail a été réalisé en deux volets. Le volet \emph{Deep Learning} comprend l'exploration du dataset, son chargement dans Google Colab, la création du modèle, son apprentissage et son évaluation. Le volet \emph{logiciel} comprend l'implémentation du backend FastAPI, du frontend responsive et de la communication entre eux. Le modèle entraîné a été enregistré et réutilisé tel quel dans l'application.
+\section{Plan du document}
+Ce rapport expose d'abord les principes des CNN, puis le dataset et les prétraitements. Il détaille ensuite l'architecture MobileNetV2 et les résultats d'apprentissage, avant de présenter l'application web, les captures réelles et les limites de la solution.
+
+\chapter{Fondements théoriques}
+\section{Apprentissage profond et classification d'images}
+Le \emph{Machine Learning} regroupe les approches permettant à un programme d'apprendre à partir d'exemples. Le \emph{Deep Learning} est une famille de méthodes qui emploie des réseaux de neurones à plusieurs couches. Dans le cadre de la classification supervisée, chaque image d'entraînement est associée à une étiquette connue. Le réseau apprend à relier les caractéristiques visuelles de l'image à sa classe.
+\section{Principe d'un CNN}
+Un CNN exploite les relations spatiales entre pixels. Ses filtres sont appliqués sur des régions locales afin de produire des cartes de caractéristiques (\emph{feature maps}). Les premières couches peuvent détecter des contours ou des textures ; les couches suivantes combinent ces informations pour produire des représentations plus abstraites.
+\subsection{Convolution}
+Une convolution consiste à faire parcourir un filtre, appelé \emph{kernel}, sur l'image. Les poids du filtre sont multipliés par les valeurs locales des pixels puis agrégés. Le résultat constitue une nouvelle carte de caractéristiques. Le \emph{stride} désigne le pas de déplacement du filtre ; le \emph{padding} ajoute une bordure, souvent de zéros, afin de gérer les dimensions et les bords.
+\subsection{Fonction ReLU}
+La fonction d'activation ReLU introduit de la non-linéarité dans le réseau :
+\begin{equation}
+\operatorname{ReLU}(x)=\max(0,x).
+\end{equation}
+Elle conserve les valeurs positives et remplace les valeurs négatives par zéro.
+\subsection{Pooling}
+Le \emph{pooling} réduit les dimensions des cartes de caractéristiques. Par exemple, le max-pooling conserve la plus grande valeur de chaque petite région. Cette réduction limite les calculs et contribue à résumer les informations visuelles.
+\subsection{Couche Dense et Softmax}
+La couche \emph{Dense} combine des caractéristiques pour produire des scores de classification. Dans ce projet, la dernière couche possède trois neurones. La fonction Softmax convertit leurs scores en probabilités :
+\begin{equation}
+p_i=\frac{e^{z_i}}{\sum_{j=1}^{3} e^{z_j}},\qquad
+\sum_{i=1}^{3}p_i=1.
+\end{equation}
+Le sport prédit correspond à l'indice associé à la probabilité maximale.
+\section{Transfer Learning}
+Le \emph{Transfer Learning}, ou transfert d'apprentissage, consiste à réutiliser des connaissances acquises lors d'un apprentissage précédent. Au lieu d'entraîner un CNN complexe entièrement à partir de zéro, on reprend un réseau pré-entraîné et l'on adapte ses couches de sortie. Cette stratégie est particulièrement pertinente avec un dataset de taille réduite.
+\section{Pourquoi MobileNetV2 ?}
+MobileNetV2 est une architecture de CNN relativement légère, utilisant notamment des convolutions séparables en profondeur et des blocs à connexion résiduelle. Dans notre approche, elle est utilisée sans sa tête de classification initiale, avec les poids acquis sur ImageNet. Ses paramètres sont gelés ; seule une nouvelle couche finale apprend à distinguer les trois sports.
+
+\chapter{Dataset et préparation des données}
+\section{Source du dataset}
+Les images proviennent du jeu de données public \emph{Sports Classification}, disponible sur Kaggle : \url{https://www.kaggle.com/datasets/gpiosenka/sports-classification}. Le dataset initial contient de nombreuses disciplines sportives. Afin de cibler une première application fonctionnelle, nous avons limité la classification à trois dossiers : \texttt{basketball}, \texttt{football} et \texttt{tennis}.
+\section{Répartition des données}
+\begin{table}[H]\centering
+\caption{Répartition des images entre les trois sous-ensembles}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Sport} & \textbf{Train} & \textbf{Validation} & \textbf{Test}\\
+\midrule
+Basketball &169&5&5\\
+Football &191&5&5\\
+Tennis &131&5&5\\
+\midrule
+\textbf{Total}&\textbf{491}&\textbf{15}&\textbf{15}\\
+\bottomrule
+\end{tabular}
+\end{table}
+Les classes ne disposent pas exactement du même nombre d'images d'entraînement : le football est plus représenté que le tennis. Il faut également noter le faible effectif des ensembles de validation et de test.
+\section{Rôle du Train, de la Validation et du Test}
+L'ensemble \textbf{Train} sert à modifier les paramètres entraînables du modèle. L'ensemble \textbf{Validation} permet de suivre sa performance au cours de l'entraînement, sans mise à jour des poids. Enfin, l'ensemble \textbf{Test} est réservé à l'évaluation finale sur des images tenues à l'écart de l'apprentissage.
+\section{Chargement et mise en forme}
+Le chargement a été réalisé grâce à \texttt{tf.keras.utils.image\_dataset\_from\_directory}. Les noms des dossiers définissent les classes. Les images sont redimensionnées à $224\times224$ pixels et réparties en lots de 16 images, appelés \emph{batches}. Pour améliorer la diversité d'ordre pendant l'apprentissage, les lots d'entraînement sont mélangés (\texttt{shuffle=True}). La validation et le test conservent un ordre stable (\texttt{shuffle=False}).
+\section{Normalisation des valeurs}
+Le CNN reçoit des pixels RGB de valeurs initiales comprises entre 0 et 255. Une couche \texttt{Rescaling} intégrée directement dans le modèle réalise l'opération suivante :
+\begin{equation}
+x_{\mathrm{normalisé}}=\frac{x}{127{,}5}-1.
+\end{equation}
+Les valeurs deviennent ainsi comprises entre $-1$ et $1$, conformément aux entrées attendues par MobileNetV2. Ce choix est important pour l'application web : celle-ci ne doit pas normaliser les pixels une seconde fois.
+
+\chapter{Conception et entraînement du modèle}
+\section{Architecture retenue}
+L'architecture combine un réseau pré-entraîné et une petite tête de classification :
+\begin{figure}[H]\centering
+\begin{tikzpicture}[
+node distance=7mm,
+box/.style={draw=vert,fill=pale,rounded corners=3pt,text width=10cm,align=center,minimum height=0.72cm,inner sep=6pt},
+arr/.style={-{Stealth[length=3mm]},thick,draw=vert}
+]
+\node[box](a){Entrée : image RGB $224\times224\times3$};
+\node[box,below=of a](b){Rescaling : passage de $[0,255]$ à $[-1,1]$};
+\node[box,below=of b](c){MobileNetV2 pré-entraîné, poids gelés : $7\times7\times1280$};
+\node[box,below=of c](d){GlobalAveragePooling2D : vecteur de 1280 caractéristiques};
+\node[box,below=of d](e){Dense (3 neurones) + Softmax};
+\node[box,below=of e](f){Probabilités : Basketball / Football / Tennis};
+\draw[arr](a)--(b);\draw[arr](b)--(c);\draw[arr](c)--(d);\draw[arr](d)--(e);\draw[arr](e)--(f);
+\end{tikzpicture}
+\caption{Architecture de classification du modèle SportsVision AI}
+\end{figure}
+\section{Résumé des couches}
+\begin{table}[H]\centering
+\caption{Principales couches du modèle}
+\begin{tabularx}{\textwidth}{lXr}
+\toprule
+\textbf{Couche}&\textbf{Dimensions de sortie}&\textbf{Paramètres}\\
+\midrule
+InputLayer&$224\times224\times3$&0\\
+Rescaling&$224\times224\times3$&0\\
+MobileNetV2&$7\times7\times1280$&2\,257\,984\\
+GlobalAveragePooling2D&1280&0\\
+Dense + Softmax&3&3\,843\\
+\midrule
+\textbf{Total}&&\textbf{2\,261\,827}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+Le réseau de base MobileNetV2 contient 2\,257\,984 paramètres \textbf{non entraînables}. La couche Dense ajoute :
+\begin{equation}
+(1280+1)\times3=3\,843
+\end{equation}
+paramètres entraînables, correspondant aux poids et biais de la nouvelle classification. Le modèle final contient donc 2\,261\,827 paramètres.
+\section{Configuration de l'entraînement}
+\begin{table}[H]\centering
+\caption{Hyperparamètres de l'apprentissage dans Google Colab}
+\begin{tabular}{ll}
+\toprule
+\textbf{Paramètre}&\textbf{Valeur}\\
+\midrule
+Optimiseur&Adam\\
+Taux d'apprentissage&0,001\\
+Fonction de perte&Sparse Categorical Crossentropy\\
+Métrique&Accuracy\\
+Batch size&16\\
+Nombre d'époques&10\\
+Taille des images&$224\times224$\\
+Classes&3\\
+\bottomrule
+\end{tabular}
+\end{table}
+La fonction de perte \emph{Sparse Categorical Crossentropy} convient aux étiquettes entières des trois classes. Le modèle est compilé, puis entraîné avec \texttt{model.fit(train\_ds, validation\_data=valid\_ds, epochs=10)}.
+\section{Évolution de l'entraînement}
+Une époque représente un parcours complet des 491 images d'entraînement. Avec un batch size de 16, une époque comporte 31 lots. Les valeurs suivantes proviennent de la sortie affichée lors de l'entraînement :
+\begin{table}[H]\centering
+\caption{Résultats affichés lors des dix époques}
+\begin{tabular}{rrrrr}
+\toprule
+\textbf{Époque}&\textbf{Accuracy}&\textbf{Loss}&\textbf{Val. accuracy}&\textbf{Val. loss}\\
+\midrule
+1&0,7699&0,5741&1,0000&0,1011\\
+2&0,9857&0,1421&1,0000&0,0301\\
+3&0,9919&0,0848&1,0000&0,0150\\
+4&0,9959&0,0593&1,0000&0,0102\\
+5&1,0000&0,0456&1,0000&0,0080\\
+6&1,0000&0,0365&1,0000&0,0057\\
+7&1,0000&0,0287&1,0000&0,0051\\
+8&1,0000&0,0234&1,0000&0,0040\\
+9&1,0000&0,0195&1,0000&0,0034\\
+10&1,0000&0,0170&1,0000&0,0030\\
+\bottomrule
+\end{tabular}
+\end{table}
+L'exactitude affichée progresse rapidement, tandis que les pertes d'entraînement et de validation diminuent. La valeur de validation de 100\,\% reste à interpréter à la lumière des 15 images seulement.
+\section{Évaluation finale}
+L'évaluation finale sur le jeu de test a produit :
+\begin{equation}
+\mathrm{Accuracy}_{\mathrm{test}}=100\,\%,\qquad
+\mathrm{Loss}_{\mathrm{test}}=0{,}0215208.
+\end{equation}
+Le modèle a correctement classé les 15 images de test. La matrice de confusion observée est :
+\begin{table}[H]\centering
+\caption{Matrice de confusion sur les 15 images de test}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Classe réelle / Classe prédite}&\textbf{Basketball}&\textbf{Football}&\textbf{Tennis}\\
+\midrule
+Basketball&\textbf{5}&0&0\\
+Football&0&\textbf{5}&0\\
+Tennis&0&0&\textbf{5}\\
+\bottomrule
+\end{tabular}
+\end{table}
+La diagonale indique les bonnes classifications. Aucune erreur n'a été observée dans ce sous-ensemble précis.
+\section{Export du modèle}
+Le modèle entraîné a été sauvegardé dans le fichier \texttt{sports\_model.keras}. L'ordre des classes est conservé dans \texttt{labels.json} :
+\begin{lstlisting}
+["basketball", "football", "tennis"]
+\end{lstlisting}
+Cette correspondance est nécessaire pour interpréter les trois probabilités de sortie : indice 0 pour basketball, 1 pour football et 2 pour tennis.
+
+\chapter{Analyse, conception et réalisation de l'application web}
+\section{Présentation de SportsVision AI}
+SportsVision AI est une application web qui met à disposition le modèle CNN entraîné. L'utilisateur peut déposer une photo sportive, voir immédiatement un aperçu, cliquer sur \emph{Analyze Image}, puis consulter la discipline prédite et les probabilités des trois catégories. Les résultats affichés proviennent de l'inférence du modèle réel, sans simulation.
+\section{Architecture logicielle}
+La solution comporte un frontend, un backend et les ressources de classification :
+\begin{figure}[H]\centering
+\begin{tikzpicture}[
+node distance=8mm,
+box/.style={draw=vert,fill=pale,rounded corners=3pt,align=center,text width=10.2cm,minimum height=0.8cm},
+arr/.style={-{Stealth[length=3mm]},thick,draw=vert}
+]
+\node[box](a){Navigateur utilisateur\\HTML / CSS / JavaScript};
+\node[box,below=of a](b){FastAPI\\Réception du fichier, contrôles, prétraitement};
+\node[box,below=of b](c){TensorFlow / Keras\\MobileNetV2 + tête Dense};
+\node[box,below=of c](d){Réponse JSON\\Sport prédit, confiance, probabilités};
+\draw[arr](a)--(b);\draw[arr](b)--(c);\draw[arr](c)--(d);
+\end{tikzpicture}
+\caption{Communication entre le navigateur, le backend et le classifieur}
+\end{figure}
+\section{Technologies et environnement}
+\begin{table}[H]\centering
+\caption{Technologies utilisées dans le projet}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Technologie}&\textbf{Utilisation}\\
+\midrule
+Python 3.11&Exécution de la logique backend.\\
+TensorFlow / Keras&Chargement et inférence du modèle CNN.\\
+FastAPI&Création des routes HTTP de l'application.\\
+Uvicorn&Serveur ASGI chargé de lancer FastAPI.\\
+Pillow&Lecture, orientation et redimensionnement des images.\\
+NumPy&Tableaux de pixels et manipulation des probabilités.\\
+HTML / CSS&Structure et style responsive de la page.\\
+JavaScript&Interaction, upload, requêtes et affichage dynamique.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+\section{Organisation du code source}
+La structure réelle du repository est la suivante :
+\begin{lstlisting}
+sportsvision-ai/
+  backend/
+    __init__.py
+    main.py
+  frontend/
+    index.html
+    styles.css
+    app.js
+  models/
+    sports_model.keras
+    labels.json
+  report_screenshots/
+  report_assets/
+  requirements.txt
+  README.md
+\end{lstlisting}
+Le fichier \texttt{backend/main.py} gère l'API et l'inférence. Les trois fichiers du frontend définissent l'interface, sa présentation et son comportement. Les fichiers \texttt{.keras} et JSON correspondent aux ressources exportées de Google Colab.
+\section{Fonctionnement de la prédiction}
+Le traitement suit les opérations suivantes :
+\begin{enumerate}
+\item L'utilisateur choisit une image JPEG, PNG ou WebP.
+\item Le frontend vérifie le fichier et affiche sa prévisualisation.
+\item Une requête HTTP multipart est envoyée à la route \texttt{POST /api/predict}.
+\item Le serveur contrôle le fichier, applique si nécessaire l'orientation EXIF et convertit l'image en RGB.
+\item Pillow redimensionne l'image à $224\times224$ pixels par interpolation bilinéaire.
+\item NumPy produit un tableau \texttt{float32} de forme $(1,224,224,3)$.
+\item Le modèle renvoie trois probabilités Softmax.
+\item L'API construit une réponse JSON, et le JavaScript présente le résultat dans l'interface.
+\end{enumerate}
+\section{Principales routes FastAPI}
+\begin{table}[H]\centering
+\caption{Routes mises en oeuvre dans le backend}
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Méthode}&\textbf{Route}&\textbf{Rôle}\\
+\midrule
+GET&\texttt{/}&Affichage de la page d'accueil.\\
+GET&\texttt{/api/health}&Vérification de disponibilité et liste des classes.\\
+POST&\texttt{/api/predict}&Réception de l'image et production de la prédiction.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+La documentation interactive FastAPI est également disponible via \texttt{/docs}.
+\section{Chargement du modèle}
+Au démarrage, le backend lit les classes dans \texttt{models/labels.json}, vérifie qu'il existe exactement trois étiquettes différentes et charge \texttt{models/sports\_model.keras} avec \texttt{tf.keras.models.load\_model(..., compile=False)}. La forme d'entrée $(224,224,3)$ et le nombre de sorties sont vérifiés. Le chargement est effectué une seule fois par processus ; aucune phase de réentraînement n'est lancée.
+\section{Prétraitement cohérent avec Colab}
+Lors de l'inférence, les pixels restent compris entre 0 et 255. La couche \texttt{Rescaling} du modèle effectue déjà la normalisation vers $[-1,1]$. Le backend n'appelle donc pas une seconde fois la fonction \texttt{preprocess\_input} et ne divise pas les pixels par 255. Cette cohérence entre entraînement et production est essentielle pour préserver le sens des prédictions.
+\section{Structure de la réponse}
+La route de prédiction renvoie les champs \texttt{predicted\_sport}, \texttt{confidence} et \texttt{probabilities}. L'ordre des classes est conservé selon le fichier JSON. Le frontend transforme les probabilités en pourcentages et affiche des barres graphiques. Le score de confiance est la probabilité Softmax de la classe gagnante ; il ne représente pas une garantie de justesse.
+\section{Sécurité et validation des fichiers}
+L'application refuse les formats non prévus et les fichiers vides. Le frontend et le backend imposent une limite de 10 Mio. Le backend vérifie également le format réel, refuse les images animées et bloque les images dépassant 25 millions de pixels. Les erreurs sont signalées par des réponses HTTP adaptées. Les appels au modèle sont protégés par un verrou afin d'éviter les inférences concurrentes sur la même instance.
+\section{Design et ergonomie}
+Le frontend comprend une page d'accueil avec un message de présentation, une zone de dépôt avec glisser-déposer, un aperçu du fichier sélectionné et un panneau de résultat. Après analyse, le sport prédit, le niveau de confiance et les probabilités des trois classes sont affichés. Un encart explique le fonctionnement du CNN et de MobileNetV2. La mise en page s'adapte également aux écrans mobiles.
+
+\chapter{Présentation des interfaces et validation fonctionnelle}
+\section{Page d'accueil}
+La page d'accueil présente SportsVision AI et les trois disciplines supportées. Elle permet d'accéder directement à l'espace de classification.
+\photo{01_homepage_viewport.png}{Page d'accueil de SportsVision AI, capture réelle du navigateur}
+\section{Zone de téléversement}
+La zone d'upload accepte la sélection d'un fichier et le glisser-déposer. L'application annonce les formats autorisés et la limite de taille.
+\photo{02_upload.png}{Interface de sélection d'une image sportive}
+\section{Prévisualisation}
+Avant l'analyse, l'utilisateur peut vérifier la photographie sélectionnée. Il peut également retirer l'image pour recommencer.
+\photo{03_image_preview.png}{Prévisualisation de la photographie avant l'analyse}
+\section{Prédiction d'une image de football}
+La capture réelle illustre un exemple correctement classifié comme football, avec une confiance affichée d'environ 91,2\,\%.
+\photo{04_football_prediction.png}{Résultat réel d'une classification de football}
+\section{Prédiction d'une image de basketball}
+Une photographie de basketball a été analysée par le même modèle. L'application a affiché une prédiction basketball avec environ 99,0\,\% de confiance.
+\photo{05_basketball_prediction.png}{Résultat réel d'une classification de basketball}
+\section{Prédiction d'une image de tennis}
+La troisième démonstration porte sur une photographie de tennis. Le modèle a affiché la classe tennis avec une confiance d'environ 91,8\,\%.
+\photo{06_tennis_prediction.png}{Résultat réel d'une classification de tennis}
+\section{Présentation du modèle dans l'interface}
+Une section informative explique la préparation de l'image, le recours à MobileNetV2 et la restitution des probabilités.
+\photo{07_model_information.png}{Section d'explication du fonctionnement du classifieur}
+\section{Adaptation aux écrans mobiles}
+L'interface a aussi été capturée dans un navigateur utilisant un viewport de 390$\times$844 pixels, montrant la disposition responsive.
+\photo[0.40]{08_mobile_viewport.png}{Version mobile de l'interface SportsVision AI}
+\section{Analyse des trois essais de démonstration}
+Les prédictions ci-dessous sont issues de réponses réelles de l'API enregistrées avec les captures. Elles sont indépendantes du calcul d'accuracy sur les 15 images de test et ne constituent pas un échantillon représentatif.
+\begin{table}[H]\centering
+\caption{Prédictions réelles obtenues lors des captures de l'application}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Image soumise}&\textbf{Basketball}&\textbf{Football}&\textbf{Tennis}\\
+\midrule
+Football&6,76\,\%&\textbf{91,18\,\%}&2,06\,\%\\
+Basketball&\textbf{98,95\,\%}&0,38\,\%&0,67\,\%\\
+Tennis&7,44\,\%&0,77\,\%&\textbf{91,80\,\%}\\
+\bottomrule
+\end{tabular}
+\end{table}
+Ces exemples confirment le bon fonctionnement de bout en bout : sélection de l'image, appel de l'API, traitement par le CNN et présentation du résultat. Ils ne prouvent toutefois pas que le modèle sera aussi performant pour toutes les images possibles.
+
+\chapter{Discussion, limites et perspectives}
+\section{Synthèse des résultats}
+Le modèle s'est entraîné rapidement grâce à MobileNetV2 pré-entraîné et à une tête de classification limitée à 3\,843 paramètres entraînables. Les erreurs d'apprentissage affichées diminuent au fil des époques. Le modèle a classé correctement les 15 images de test et les trois photographies utilisées lors des démonstrations de l'application.
+\section{Interprétation prudente des 100\,\%}
+Le résultat de 100\,\% obtenu sur le jeu de test correspond exactement à 15 prédictions correctes sur 15. Un ensemble aussi petit ne permet pas d'estimer avec précision la performance sur des images variées. Par ailleurs, les 15 exemples de validation peuvent difficilement représenter toute la diversité des conditions d'éclairage, de cadrage ou de contexte sportif.
+\section{Limites du modèle}
+\begin{itemize}
+\item \textbf{Nombre de classes limité :} le système distingue uniquement basketball, football et tennis.
+\item \textbf{Jeux d'évaluation réduits :} 15 images en validation et 15 en test sont insuffisantes pour des conclusions générales.
+\item \textbf{Images hors distribution :} toute image soumise recevra l'une des trois étiquettes, même si elle représente un autre sport ou un objet sans lien avec le sport.
+\item \textbf{Confiance non calibrée :} une forte probabilité Softmax ne garantit pas qu'une décision soit correcte.
+\item \textbf{Contexte des photographies :} les arrière-plans ou équipements visibles peuvent influencer la prédiction.
+\end{itemize}
+\section{Améliorations envisagées}
+Plusieurs prolongements sont possibles : augmenter les données de chaque classe ; créer un jeu de test indépendant plus large ; utiliser des techniques d'augmentation de données ; essayer un ajustement fin de certaines couches de MobileNetV2 ; mesurer la précision et le rappel par classe ; étudier un seuil de rejet pour les images appartenant à d'autres catégories ; enfin, déployer l'application avec des mécanismes adaptés à un usage public.
+\section{Bilan pédagogique}
+Le projet a permis de mobiliser des connaissances en convolution, ReLU, pooling, tenseurs, Softmax, Transfer Learning, entraînement supervisé et évaluation d'un classifieur. Il a également mis en évidence l'importance de la cohérence des prétraitements entre Google Colab et l'application finale.
+
+\chapter{Conclusion générale}
+SportsVision AI illustre une chaîne complète de vision par ordinateur : préparation d'images, entraînement d'un CNN, évaluation, sauvegarde du modèle et intégration dans une application web. Le choix de MobileNetV2 a permis de réutiliser des représentations visuelles pré-entraînées et de limiter le nombre de paramètres à adapter.
+
+Le modèle a obtenu des résultats encourageants sur les données de test disponibles, et l'application développée permet de traiter de véritables photographies de football, basketball et tennis. Néanmoins, la petite taille du jeu de test impose de ne pas assimiler l'exactitude observée de 100\,\% à une fiabilité universelle. Le projet constitue donc un prototype académique fonctionnel, qui pourrait être renforcé par davantage de données, une évaluation approfondie et un élargissement à d'autres sports.
+
+\appendix
+\chapter{Extraits techniques et utilisation}
+\section{Commande de démarrage de l'application}
+Après installation des dépendances dans un environnement virtuel Python 3.11, le serveur peut être lancé depuis le dossier racine du projet :
+\begin{lstlisting}
+python -m uvicorn backend.main:app --reload
+\end{lstlisting}
+Le site est alors accessible à l'adresse \url{http://127.0.0.1:8000}. La route \texttt{/docs} permet d'explorer les endpoints dans Swagger UI.
+\section{Exemple de prétraitement côté serveur}
+La logique utilisée par le backend est équivalente à :
+\begin{lstlisting}
+rgb = ImageOps.exif_transpose(source).convert("RGB")
+resized = rgb.resize((224, 224), Image.Resampling.BILINEAR)
+batch = np.expand_dims(
+    np.asarray(resized, dtype=np.float32), axis=0
+)
+\end{lstlisting}
+Le modèle est ensuite appelé en mode inférence, avec \texttt{training=False}.
+\section{Structure des étiquettes}
+\begin{lstlisting}
+["basketball", "football", "tennis"]
+\end{lstlisting}
+\section{Provenance des photographies illustratives}
+Les captures d'écran montrent trois photographies tierces. Les auteurs et licences, indiqués dans les notes de capture du repository, sont :
+\begin{itemize}
+\item \textbf{Football :} Rick Dikeman (Rdikeman), \emph{Football in Bloomington, Indiana, 1995}, licence CC BY-SA 3.0. Source : \url{https://commons.wikimedia.org/wiki/File:Football_in_Bloomington,_Indiana,_1995.jpg}.
+\item \textbf{Basketball :} kris krüg, \emph{USA vs. China Mens Basketball -- Beijing 2008 Olympic Games}, licence CC BY-SA 2.0. Source : \url{https://commons.wikimedia.org/wiki/File:USA_vs._China_Mens_Basketball_-_Beijing_2008_Olympic_Games_(2751923597).jpg}.
+\item \textbf{Tennis :} IvanWalsh.com, \emph{Rafael Nadal (4132943958)}, licence CC BY 2.0. Source : \url{https://commons.wikimedia.org/wiki/File:Rafael_Nadal_(4132943958).jpg}.
+\end{itemize}
+Les auteurs doivent être crédités lors de la réutilisation des images incorporées dans les captures.
+
+\begin{thebibliography}{9}
+\bibitem{mobilenet} M. Sandler et al., \emph{MobileNetV2: Inverted Residuals and Linear Bottlenecks}, CVPR, 2018. \url{https://arxiv.org/abs/1801.04381}.
+\bibitem{imagenet} J. Deng et al., \emph{ImageNet: A Large-Scale Hierarchical Image Database}, CVPR, 2009.
+\bibitem{keras} Documentation Keras, \emph{MobileNet, MobileNetV2, and MobileNetV3}. \url{https://keras.io/api/applications/mobilenet/}.
+\bibitem{tf} Documentation TensorFlow, \emph{Image classification}. \url{https://www.tensorflow.org/tutorials/images/classification}.
+\bibitem{kaggle} gpiosenka, \emph{Sports Classification}, Kaggle. \url{https://www.kaggle.com/datasets/gpiosenka/sports-classification}.
+\bibitem{fastapi} Documentation FastAPI. \url{https://fastapi.tiangolo.com/}.
+\bibitem{repo} Code source du projet, \emph{SportsVision AI}. \url{https://github.com/aminebenserrar/sportsvision-ai}.
+\end{thebibliography}
+\end{document}
