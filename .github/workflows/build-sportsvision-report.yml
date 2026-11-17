@@ -50,5 +50,6 @@ jobs:
           git add rapport/rapport_sportsvision.pdf
           if ! git diff --cached --quiet; then
             git commit -m "Build latest SportsVision report PDF"
+            git pull --rebase origin main
             git push
           fi
