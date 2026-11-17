@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper,oneside]{report}
+\documentclass[11pt,a4paper,oneside]{report}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
@@ -21,7 +21,7 @@
 \usepackage{setspace}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning}
-\geometry{left=2.7cm,right=2.5cm,top=2.7cm,bottom=2.6cm}
+\geometry{left=2.65cm,right=2.45cm,top=2.55cm,bottom=2.45cm}
 \definecolor{marine}{HTML}{176C47}
 \definecolor{vert}{HTML}{168450}
 \definecolor{pale}{HTML}{F0F7F2}
@@ -35,13 +35,13 @@
 \usepackage{needspace}
 \hypersetup{colorlinks=true,linkcolor=marine,urlcolor=vert,pdftitle={Rapport SportsVision AI},pdfauthor={Projet Deep Learning}}
 \titleformat{\chapter}[display]{\normalfont\bfseries\color{marine}}{\Large\hfill Chapitre \thechapter}{0.25cm}{\Huge}[\vspace{-0.12cm}\titlerule]
-\titlespacing*{\chapter}{0pt}{-6pt}{22pt}
+\titlespacing*{\chapter}{0pt}{-8pt}{12pt}
 \titleformat{\section}{\Large\bfseries\color{marine}}{\thesection}{0.7em}{}[\color{marine!40}\titlerule]
 \titleformat{\subsection}{\large\bfseries\color{vert}}{\thesubsection}{0.7em}{}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{0.5em}
-\setstretch{1.16}
-\setlist[itemize]{itemsep=0.2em,leftmargin=1cm}
+\setlength{\parskip}{0.37em}
+\setstretch{1.10}
+\setlist[itemize]{itemsep=0.1em,leftmargin=0.9cm}
 \captionsetup{font=small,labelfont=bf}
 \pagestyle{fancy}
 \fancyhf{}
@@ -57,34 +57,31 @@
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,backgroundcolor=\color{pale},showstringspaces=false,columns=fullflexible,keywordstyle=\color{vert},commentstyle=\color{graytext}}
 \newcommand{\photo}[3][0.94]{%
 \begin{figure}[H]\centering
-\IfFileExists{../report_screenshots/#2}{\includegraphics[width=#1\textwidth,height=0.70\textheight,keepaspectratio]{../report_screenshots/#2}}{\fbox{\parbox{0.8\textwidth}{Capture : \texttt{\detokenize{#2}}}}}
+\IfFileExists{../report_screenshots/#2}{\includegraphics[width=#1\textwidth,height=0.38\textheight,keepaspectratio]{../report_screenshots/#2}}{\fbox{\parbox{0.8\textwidth}{Capture : \texttt{\detokenize{#2}}}}}
 \caption{#3}
 \end{figure}}
 \begin{document}
 \begin{titlepage}
 \thispagestyle{empty}
 \begin{center}
-\begin{minipage}[c]{0.59\textwidth}\raggedright
-\IfFileExists{../report_assets/emsi_logo.png}{\includegraphics[width=\linewidth,height=3cm,keepaspectratio]{../report_assets/emsi_logo.png}}{
-{\color{emsiGreen}\Large\bfseries EMSI}\\
-\small École Marocaine des Sciences de l'Ingénieur}
-\end{minipage}
-\hfill
-\begin{minipage}[c]{0.34\textwidth}\raggedleft
-\IfFileExists{../report_assets/honoris_logo.png}{\includegraphics[width=\linewidth,height=2.2cm,keepaspectratio]{../report_assets/honoris_logo.png}}{
-{\color{honorisred}\Large\bfseries HONORIS}\\
-\small UNITED UNIVERSITIES}
-\end{minipage}
-
-\vspace{1.3cm}
+\IfFileExists{../report_assets/emsi_logo.png}{%
+\includegraphics[width=0.92\textwidth,height=3.2cm,keepaspectratio]{../report_assets/emsi_logo.png}%
+}{\Large\bfseries EMSI -- École Marocaine des Sciences de l'Ingénieur}
+\par
+\vspace{0.3cm}
+\IfFileExists{../report_assets/honoris_logo.png}{%
+\includegraphics[width=0.25\textwidth,height=1.0cm,keepaspectratio]{../report_assets/honoris_logo.png}%
+}{\small Honoris United Universities}
+\par
+\vspace{0.75cm}
 {\color{marine}\rule{\textwidth}{1.2pt}}\par
-\vspace{1.05cm}
+\vspace{0.65cm}
 {\Large\bfseries RAPPORT DE PROJET ACADÉMIQUE}\par
 \vspace{0.23cm}
 {\large 5\textsuperscript{e} année -- Ingénierie Informatique et Réseaux}\par
 \vspace{0.1cm}
 {\large Module : Deep Learning}\par
-\vspace{1.25cm}
+\vspace{0.75cm}
 {\normalsize\textsc{Sous le thème}}\par
 \vspace{0.48cm}
 {\Huge\bfseries\color{marine} SportsVision AI}\par
@@ -93,7 +90,7 @@
 \vspace{0.4cm}
 {\large Par réseau de neurones convolutif (CNN)\\
 et transfert d'apprentissage avec MobileNetV2}\par
-\vspace{0.65cm}
+\vspace{0.4cm}
 {\color{marine}\rule{0.80\textwidth}{1.0pt}}\par
 \vspace{0.6cm}
 \begin{tikzpicture}
@@ -111,7 +108,7 @@ et transfert d'apprentissage avec MobileNetV2}\par
 \textbf{\color{marine}Encadré par :}\\[4pt]
 \large Encadrant pédagogique
 \end{minipage}
-\vspace{1.1cm}\par
+\vspace{0.55cm}\par
 {\color{marine}\rule{\textwidth}{0.75pt}}\par
 \vspace{0.25cm}
 {\large Année universitaire : 2026--2027}
@@ -119,14 +116,6 @@ et transfert d'apprentissage avec MobileNetV2}\par
 \end{titlepage}
 
 \pagenumbering{roman}
-\chapter*{Dédicaces}
-\addcontentsline{toc}{chapter}{Dédicaces}
-Je dédie ce travail à ma famille pour ses encouragements et son soutien tout au long de mon parcours académique. Je le dédie également à mes enseignants, qui ont contribué à ma formation, ainsi qu'à toute personne ayant encouragé mon apprentissage de l'intelligence artificielle et du développement logiciel.
-
-\chapter*{Remerciements}
-\addcontentsline{toc}{chapter}{Remerciements}
-Je tiens à remercier les enseignants de l'École Marocaine des Sciences de l'Ingénieur (EMSI) pour les connaissances transmises durant ma formation. Mes remerciements s'adressent également à l'équipe pédagogique du module Deep Learning pour les notions étudiées et les travaux pratiques qui ont permis de réaliser ce projet. Enfin, je remercie toutes les personnes qui m'ont apporté des conseils ou un soutien durant les différentes étapes de conception, d'expérimentation et de développement de SportsVision AI.
-
 \chapter*{Résumé}
 \addcontentsline{toc}{chapter}{Résumé}
 Le projet \textbf{SportsVision AI} propose un système intelligent de classification de photographies sportives. Il combine l'entraînement d'un réseau de neurones convolutif dans Google Colab et le développement d'une application web accessible depuis un navigateur. L'utilisateur choisit une image, puis l'application indique s'il s'agit de basketball, de football ou de tennis et affiche les probabilités associées.
@@ -137,33 +126,6 @@ L'application utilise un serveur \textbf{FastAPI}, le modèle sauvegardé au for
 
 \textbf{Mots-clés :} Deep Learning ; CNN ; classification d'images ; MobileNetV2 ; Transfer Learning ; TensorFlow ; FastAPI.
 
-\chapter*{Abstract}
-\addcontentsline{toc}{chapter}{Abstract}
-SportsVision AI is an image-classification project combining a convolutional neural network with a browser-based interface. A pretrained MobileNetV2 backbone is reused through transfer learning for three sports: basketball, football and tennis. The model was trained on 491 images, with 15 validation and 15 test images. It correctly classified all 15 test images, although such a small set does not establish its general accuracy. The deployed application uses FastAPI and TensorFlow/Keras to preprocess uploaded images and return class probabilities through a responsive user interface.
-
-\listoffigures
-\addcontentsline{toc}{chapter}{Liste des figures}
-\listoftables
-\addcontentsline{toc}{chapter}{Liste des tableaux}
-\chapter*{Liste des abréviations}
-\addcontentsline{toc}{chapter}{Liste des abréviations}
-\begin{longtable}{p{2.3cm}p{11cm}}
-\toprule
-\textbf{Abréviation} & \textbf{Signification}\\
-\midrule
-AI / IA & Artificial Intelligence / Intelligence artificielle\\
-API & Application Programming Interface\\
-ASGI & Asynchronous Server Gateway Interface\\
-CNN & Convolutional Neural Network, réseau de neurones convolutif\\
-CSV & Comma-Separated Values\\
-EXIF & Exchangeable Image File Format\\
-HTTP & Hypertext Transfer Protocol\\
-JSON & JavaScript Object Notation\\
-RGB & Rouge, vert, bleu : composantes de couleur\\
-ReLU & Rectified Linear Unit\\
-UI & User Interface, interface utilisateur\\
-\bottomrule
-\end{longtable}
 \tableofcontents
 \clearpage
 \pagenumbering{arabic}
@@ -185,8 +147,8 @@ Ce projet poursuit quatre objectifs complémentaires :
 \end{itemize}
 \section{Démarche}
 Le travail a été réalisé en deux volets. Le volet \emph{Deep Learning} comprend l'exploration du dataset, son chargement dans Google Colab, la création du modèle, son apprentissage et son évaluation. Le volet \emph{logiciel} comprend l'implémentation du backend FastAPI, du frontend responsive et de la communication entre eux. Le modèle entraîné a été enregistré et réutilisé tel quel dans l'application.
-\section{Plan du document}
-Ce rapport expose d'abord les principes des CNN, puis le dataset et les prétraitements. Il détaille ensuite l'architecture MobileNetV2 et les résultats d'apprentissage, avant de présenter l'application web, les captures réelles et les limites de la solution.
+\section{Organisation du rapport}
+Le rapport présente les fondements du CNN, les données et l'entraînement dans Google Colab, les résultats expérimentaux, l'application FastAPI et les interfaces illustrées. Le notebook de référence est disponible à l'adresse : \url{https://colab.research.google.com/drive/1zgeVvl2XZNKWtXm44oMiwRtb2vpyfGwb?usp=sharing}. Les résultats chiffrés relatés sont ceux relevés durant la réalisation du projet.
 
 \chapter{Fondements théoriques}
 \section{Apprentissage profond et classification d'images}
