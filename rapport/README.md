@@ -1,35 +1,35 @@
-# Rapport LaTeX — SportsVision AI
+# Rapport SportsVision AI — édition EMSI / 5e année
 
-Ce dossier contient le rapport académique complet en français : `rapport_sportsvision.tex`.
+**Auteur :** Mohamed Amine Bensserrar  
+**Formation :** 5e année, Ingénierie Informatique et Réseaux (EMSI)  
+**Année universitaire :** 2026–2027
 
-## Compiler avec les images
+## Livrables
 
-Le fichier LaTeX utilise directement les images présentes dans `../report_screenshots/`, déjà incluses dans ce dépôt.
+- `rapport_sportsvision.tex` : source LaTeX complète, édition mise en forme selon le rapport SONACOS de référence.
+- `rapport_sportsvision.pdf` : PDF généré automatiquement par GitHub Actions après compilation réussie.
+- Les captures réelles de SportsVision AI sont référencées depuis `../report_screenshots/`.
+- Les logos d'établissement sont préparés dans `report_assets/` par le script `prepare_logos.py` au cours de la compilation.
 
-### Overleaf
+## Style éditorial
 
-1. Télécharger le dépôt GitHub en ZIP (bouton **Code > Download ZIP**).
-2. Sur Overleaf, créer un nouveau projet avec **Upload Project** et sélectionner le ZIP.
-3. Ouvrir `rapport/rapport_sportsvision.tex` et le définir comme **Main Document**.
-4. Compiler avec **pdfLaTeX**. Si les chemins des images ne sont pas résolus depuis le dossier de compilation, déplacer le fichier .tex à la racine et remplacer `../report_screenshots/` par `report_screenshots/` dans la macro `\photo`.
+Page de couverture académique avec EMSI / Honoris, 5e année et auteur complet ; titres et bandeaux verts ; en-têtes et pieds de page ; dédicaces ; remerciements ; résumés français et anglais ; liste des figures ; liste des tableaux ; liste des abréviations ; sommaire ; 7 chapitres ; captures de l'application ; annexes et bibliographie.
 
-### Compilation locale (TeX Live ou MiKTeX)
+Le contenu scientifique conserve les nombres d'images d'entraînement, validation et test, les hyperparamètres MobileNetV2, les résultats observés, l'architecture FastAPI et les précautions liées à la taille réduite de l'échantillon de test.
 
-Dans un terminal à la racine du dépôt :
+## Compilation locale
+
+Avec une distribution TeX complète, depuis la racine du dépôt :
 
 ```bash
+python rapport/prepare_logos.py
 cd rapport
-pdflatex -interaction=nonstopmode rapport_sportsvision.tex
-pdflatex -interaction=nonstopmode rapport_sportsvision.tex
+pdflatex -interaction=nonstopmode -halt-on-error rapport_sportsvision.tex
+pdflatex -interaction=nonstopmode -halt-on-error rapport_sportsvision.tex
 ```
 
-Le PDF est produit à l'emplacement `rapport/rapport_sportsvision.pdf`.
+## Compilation automatique sur GitHub
 
-## Personnalisation
+Le workflow `.github/workflows/build-sportsvision-report.yml` prépare les logos, exécute LaTeX, publie le PDF comme artefact et tente de l'enregistrer dans `rapport/` pour le téléchargement direct.
 
-- Compléter l'établissement et le nom de l'encadrant sur la page de garde.
-- Les résultats de l'application proviennent du fichier `report_screenshots/prediction_results.json`.
-- Les chiffres du test CNN proviennent de la session d'entraînement antérieure (15 images de test). Le rapport explique explicitement que ces 15 images ne suffisent pas à prouver une exactitude générale de 100 %.
-- Les photographies tierces employées pour les démonstrations sont créditées en annexe.
-
-Les captures d'écran sont les fichiers réels du dossier `report_screenshots/`. Le document n'invente pas de captures.
+**Sources des logos :** site officiel EMSI et logo Honoris sur Wikimedia Commons. Les photographies sportives visibles dans les captures sont créditées en annexe et dans `report_screenshots/CAPTURE_NOTES.md`.
