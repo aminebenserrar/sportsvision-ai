@@ -22,13 +22,21 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning}
 \geometry{left=2.7cm,right=2.5cm,top=2.7cm,bottom=2.6cm}
-\definecolor{marine}{HTML}{173B34}
-\definecolor{vert}{HTML}{137660}
-\definecolor{pale}{HTML}{F0F6F3}
+\definecolor{marine}{HTML}{176C47}
+\definecolor{vert}{HTML}{168450}
+\definecolor{pale}{HTML}{F0F7F2}
 \definecolor{graytext}{HTML}{555555}
+\definecolor{honorisred}{HTML}{77162C}
+\definecolor{emsiGreen}{HTML}{008744}
+\usepackage{microtype}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{etoolbox}
+\usepackage{needspace}
 \hypersetup{colorlinks=true,linkcolor=marine,urlcolor=vert,pdftitle={Rapport SportsVision AI},pdfauthor={Projet Deep Learning}}
-\titleformat{\chapter}[display]{\normalfont\bfseries\color{marine}}{\Large Chapitre \thechapter}{0.35cm}{\Huge}
-\titleformat{\section}{\Large\bfseries\color{marine}}{\thesection}{0.7em}{}
+\titleformat{\chapter}[display]{\normalfont\bfseries\color{marine}}{\Large\hfill Chapitre \thechapter}{0.25cm}{\Huge}[\vspace{-0.12cm}\titlerule]
+\titlespacing*{\chapter}{0pt}{-6pt}{22pt}
+\titleformat{\section}{\Large\bfseries\color{marine}}{\thesection}{0.7em}{}[\color{marine!40}\titlerule]
 \titleformat{\subsection}{\large\bfseries\color{vert}}{\thesubsection}{0.7em}{}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.5em}
@@ -37,10 +45,15 @@
 \captionsetup{font=small,labelfont=bf}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small SportsVision AI}
-\fancyhead[R]{\small Projet Deep Learning}
+\fancyhead[L]{\small\color{marine}SportsVision AI}
+\fancyhead[R]{\small\color{marine}5\textsuperscript{e} année -- Deep Learning}
 \fancyfoot[C]{\thepage}
-\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{marine}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\arraystretch}{1.20}
+\AtBeginEnvironment{tabular}{\rowcolors{2}{pale}{white}}
+\captionsetup[table]{position=top}
+\setlength{\fboxsep}{9pt}
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,backgroundcolor=\color{pale},showstringspaces=false,columns=fullflexible,keywordstyle=\color{vert},commentstyle=\color{graytext}}
 \newcommand{\photo}[3][0.94]{%
 \begin{figure}[H]\centering
@@ -49,34 +62,71 @@
 \end{figure}}
 \begin{document}
 \begin{titlepage}
-\centering
-\vspace*{1.2cm}
-{\color{vert}\rule{\textwidth}{1.8pt}}\par
-\vspace{1.2cm}
-{\Large \textbf{Établissement : à compléter}}\par
-\vspace{0.45cm}
-{\large Filière : Informatique \quad $\vert$ \quad Module : Deep Learning}\par
-\vspace{2cm}
+\thispagestyle{empty}
+\begin{center}
+\begin{minipage}[c]{0.59\textwidth}\raggedright
+\IfFileExists{../report_assets/emsi_logo.png}{\includegraphics[width=\linewidth,height=3cm,keepaspectratio]{../report_assets/emsi_logo.png}}{
+{\color{emsiGreen}\Large\bfseries EMSI}\\
+\small École Marocaine des Sciences de l'Ingénieur}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.34\textwidth}\raggedleft
+\IfFileExists{../report_assets/honoris_logo.png}{\includegraphics[width=\linewidth,height=2.2cm,keepaspectratio]{../report_assets/honoris_logo.png}}{
+{\color{honorisred}\Large\bfseries HONORIS}\\
+\small UNITED UNIVERSITIES}
+\end{minipage}
+
+\vspace{1.3cm}
+{\color{marine}\rule{\textwidth}{1.2pt}}\par
+\vspace{1.05cm}
+{\Large\bfseries RAPPORT DE PROJET ACADÉMIQUE}\par
+\vspace{0.23cm}
+{\large 5\textsuperscript{e} année -- Ingénierie Informatique et Réseaux}\par
+\vspace{0.1cm}
+{\large Module : Deep Learning}\par
+\vspace{1.25cm}
+{\normalsize\textsc{Sous le thème}}\par
+\vspace{0.48cm}
 {\Huge\bfseries\color{marine} SportsVision AI}\par
-\vspace{0.55cm}
-{\LARGE Classification automatique des images sportives}\par
-\vspace{0.3cm}
-{\Large Par réseau de neurones convolutif et transfert d'apprentissage}\par
-\vspace{1.4cm}
+\vspace{0.5cm}
+{\LARGE\bfseries Classification automatique\\ des images sportives}\par
+\vspace{0.4cm}
+{\large Par réseau de neurones convolutif (CNN)\\
+et transfert d'apprentissage avec MobileNetV2}\par
+\vspace{0.65cm}
+{\color{marine}\rule{0.80\textwidth}{1.0pt}}\par
+\vspace{0.6cm}
 \begin{tikzpicture}
-\node[draw=vert,fill=pale,rounded corners=6pt,inner sep=17pt,align=center,text width=10.7cm]{\Large\textbf{MobileNetV2}\\[6pt]\normalsize TensorFlow / Keras \quad $\bullet$ \quad FastAPI \quad $\bullet$ \quad Web responsive};
+\node[draw=marine!45,fill=pale,rounded corners=5pt,inner sep=12pt,align=center,text width=0.76\textwidth]{
+\textbf{Vision par ordinateur et intelligence artificielle}\\[5pt]
+\small TensorFlow / Keras \quad $\bullet$ \quad FastAPI \quad $\bullet$ \quad Application web
+};
 \end{tikzpicture}
 \vfill
-\begin{tabular}{rl}
-\textbf{Réalisé par :} & Amine Bensserrar\\
-\textbf{Encadré par :} & À compléter\\
-\textbf{Année universitaire :} & 2026--2027
-\end{tabular}\par
-\vspace{1.2cm}
-{\color{vert}\rule{\textwidth}{1.8pt}}
+\begin{minipage}[t]{0.52\linewidth}
+\textbf{\color{marine}Réalisé par :}\\[4pt]
+\large\textbf{Mohamed Amine Bensserrar}
+\end{minipage}
+\begin{minipage}[t]{0.43\linewidth}
+\textbf{\color{marine}Encadré par :}\\[4pt]
+\large Encadrant pédagogique
+\end{minipage}
+\vspace{1.1cm}\par
+{\color{marine}\rule{\textwidth}{0.75pt}}\par
+\vspace{0.25cm}
+{\large Année universitaire : 2026--2027}
+\end{center}
 \end{titlepage}
 
 \pagenumbering{roman}
+\chapter*{Dédicaces}
+\addcontentsline{toc}{chapter}{Dédicaces}
+Je dédie ce travail à ma famille pour ses encouragements et son soutien tout au long de mon parcours académique. Je le dédie également à mes enseignants, qui ont contribué à ma formation, ainsi qu'à toute personne ayant encouragé mon apprentissage de l'intelligence artificielle et du développement logiciel.
+
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+Je tiens à remercier les enseignants de l'École Marocaine des Sciences de l'Ingénieur (EMSI) pour les connaissances transmises durant ma formation. Mes remerciements s'adressent également à l'équipe pédagogique du module Deep Learning pour les notions étudiées et les travaux pratiques qui ont permis de réaliser ce projet. Enfin, je remercie toutes les personnes qui m'ont apporté des conseils ou un soutien durant les différentes étapes de conception, d'expérimentation et de développement de SportsVision AI.
+
 \chapter*{Résumé}
 \addcontentsline{toc}{chapter}{Résumé}
 Le projet \textbf{SportsVision AI} propose un système intelligent de classification de photographies sportives. Il combine l'entraînement d'un réseau de neurones convolutif dans Google Colab et le développement d'une application web accessible depuis un navigateur. L'utilisateur choisit une image, puis l'application indique s'il s'agit de basketball, de football ou de tennis et affiche les probabilités associées.
@@ -91,9 +141,30 @@ L'application utilise un serveur \textbf{FastAPI}, le modèle sauvegardé au for
 \addcontentsline{toc}{chapter}{Abstract}
 SportsVision AI is an image-classification project combining a convolutional neural network with a browser-based interface. A pretrained MobileNetV2 backbone is reused through transfer learning for three sports: basketball, football and tennis. The model was trained on 491 images, with 15 validation and 15 test images. It correctly classified all 15 test images, although such a small set does not establish its general accuracy. The deployed application uses FastAPI and TensorFlow/Keras to preprocess uploaded images and return class probabilities through a responsive user interface.
 
-\tableofcontents
 \listoffigures
+\addcontentsline{toc}{chapter}{Liste des figures}
 \listoftables
+\addcontentsline{toc}{chapter}{Liste des tableaux}
+\chapter*{Liste des abréviations}
+\addcontentsline{toc}{chapter}{Liste des abréviations}
+\begin{longtable}{p{2.3cm}p{11cm}}
+\toprule
+\textbf{Abréviation} & \textbf{Signification}\\
+\midrule
+AI / IA & Artificial Intelligence / Intelligence artificielle\\
+API & Application Programming Interface\\
+ASGI & Asynchronous Server Gateway Interface\\
+CNN & Convolutional Neural Network, réseau de neurones convolutif\\
+CSV & Comma-Separated Values\\
+EXIF & Exchangeable Image File Format\\
+HTTP & Hypertext Transfer Protocol\\
+JSON & JavaScript Object Notation\\
+RGB & Rouge, vert, bleu : composantes de couleur\\
+ReLU & Rectified Linear Unit\\
+UI & User Interface, interface utilisateur\\
+\bottomrule
+\end{longtable}
+\tableofcontents
 \clearpage
 \pagenumbering{arabic}
 
