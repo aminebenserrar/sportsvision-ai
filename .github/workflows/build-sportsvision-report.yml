@@ -61,7 +61,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add rapport/rapport_sportsvision.pdf rapport/fiche_comprendre_sportsvision.pdf
+          git add rapport/fiche_comprendre_sportsvision.pdf
           if ! git diff --cached --quiet; then
             git commit -m "Build latest SportsVision report PDF"
             git pull --rebase origin main
