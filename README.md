@@ -146,3 +146,12 @@ In another terminal in the project folder:
 ```
 
 Backend tests use the existing dependencies and Python standard library. Browser tests require the optional Playwright package and Microsoft Edge. Backend tests cover single/batch agreement, all input formats, grouping, original ZIP bytes, safe filenames, duplicates, corrupted/empty/animated/oversized images, dimensions, batch limits, and all-invalid requests. Browser tests cover the original classifier, batch galleries and counts, partial failures, actual downloads, mobile overflow, clearing results, and disabling downloads when all files fail. Browser screenshots and the downloaded test ZIP go to ignored `test_artifacts/`.
+
+## Training notebook and academic evidence
+
+- [Original Google Colab notebook](https://colab.research.google.com/drive/1zgeVvl2XZNKWtXm44oMiwRtb2vpyfGwb?usp=sharing) (includes real execution outputs).
+- [Source notebook stored in this repository](notebooks/SportsVision_AI_Training.ipynb) (all 19 original source cells; bulky execution outputs removed).
+- [Dataset split audit](scripts/check_dataset.py): inspects the upstream Kaggle `train/`, `valid/`, `test/` folders. The source dataset is already split; the script does not resplit it.
+- [Final academic report](rapport/rapport_sportsvision.pdf) (model architecture, measured learning curves from original Colab outputs, Precision/Recall/F1-score, confusion matrix, ethics, implementation and screenshot evidence).
+
+The 15-image test sample has 5 examples per class. The observed accuracy, precision, recall and F1-score are all 1.00 **on this tiny test set only**; the results should not be treated as a general guarantee.
