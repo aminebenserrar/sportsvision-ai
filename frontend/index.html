@@ -8,6 +8,8 @@
   <title>SportsVision AI — See the sport. Understand the image.</title>
   <link rel="stylesheet" href="/static/styles.css">
   <script src="/static/app.js" defer></script>
+  <link rel="stylesheet" href="/static/organizer.css">
+  <script src="/static/organizer.js" defer></script>
 </head>
 <body>
   <header class="site-header shell">
@@ -49,6 +51,35 @@
         </div>
         <div class="model-strip"><span class="status-dot"></span> MobileNetV2 <span>224 × 224 RGB</span></div>
       </div>
+    </section>
+
+    <section id="organizer" class="organizer" aria-labelledby="organizer-title">
+      <div class="organizer-heading">
+        <div><span class="eyebrow">YOUR COLLECTION. SORTED.</span><h2 id="organizer-title">Automatic Sports Image Organization</h2><p>One upload. Three sports. Turn your collection into categorized folders.</p></div>
+        <span class="ai-tag">BATCH CLASSIFICATION</span>
+      </div>
+      <div class="organizer-controls">
+        <label class="dropzone batch-dropzone" id="batch-dropzone" for="batch-input">
+          <input id="batch-input" type="file" multiple accept="image/jpeg,image/png,image/webp" aria-label="Select images to organize" aria-describedby="batch-limits">
+          <span class="upload-prompt"><span class="upload-icon" aria-hidden="true">↥</span><strong>Bring the whole collection</strong><span>Drop images here or <span class="browse-text">browse files</span></span><small id="batch-limits">Up to 20 images · 10 MB each · 50 MB total<br>JPEG, PNG or WebP · Maximum 25 megapixels each</small></span>
+        </label>
+        <div class="batch-actions">
+          <p id="batch-selection">No images selected</p>
+          <button id="organize-button" class="analyze-button" disabled>Organize Images <span aria-hidden="true">↗</span></button>
+          <button id="download-organized" class="batch-secondary" disabled>Download Organized ZIP</button>
+          <button id="batch-clear" class="batch-clear" disabled>Clear collection</button>
+          <p class="batch-note">Original images stay intact. Files are processed temporarily and are not kept on the server.</p>
+        </div>
+      </div>
+      <p id="batch-status" class="batch-status" role="status" aria-live="polite">Select images to get started.</p>
+      <p id="batch-error" class="error-message" role="alert" hidden></p>
+      <div id="batch-failures" class="batch-failures" hidden><h3>Images that could not be organized</h3><ul id="batch-failure-list"></ul></div>
+      <div id="batch-gallery" class="batch-gallery" aria-busy="false">
+        <section class="sport-group" data-sport="basketball" aria-labelledby="basketball-group"><h3 id="basketball-group">Basketball <span class="category-count">0</span></h3><div class="category-images"><p class="category-empty">No images yet.</p></div></section>
+        <section class="sport-group" data-sport="football" aria-labelledby="football-group"><h3 id="football-group">Football <span class="category-count">0</span></h3><div class="category-images"><p class="category-empty">No images yet.</p></div></section>
+        <section class="sport-group" data-sport="tennis" aria-labelledby="tennis-group"><h3 id="tennis-group">Tennis <span class="category-count">0</span></h3><div class="category-images"><p class="category-empty">No images yet.</p></div></section>
+      </div>
+      <p class="batch-note">Categories are model predictions, not guarantees. Unrelated images will still be assigned to one of the three sports. Invalid files are skipped.</p>
     </section>
 
     <section id="how-it-works" class="explainer">

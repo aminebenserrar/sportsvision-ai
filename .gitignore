@@ -9,3 +9,4 @@ __pycache__/
 !.env.example
 .idea/
 .vscode/
+test_artifacts/

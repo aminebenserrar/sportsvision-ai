@@ -94,8 +94,55 @@ The supplied `.keras` model is included in this repository unchanged, along with
 
 ## Report screenshots
 
+The original report screenshots document the single-image version; they have not been replaced by the new organization feature's test captures.
+
 Download `sportsvision_screenshots.zip` or browse `report_screenshots/`. The archive contains all eight requested views plus full-viewport alternatives, photograph credits, and actual prediction responses. Read `report_screenshots/CAPTURE_NOTES.md` before reusing the photographs in your report.
 
 ![SportsVision AI football prediction](report_screenshots/04_football_prediction.png)
 
 The source photographs and reproducible Playwright capture script are in `report_assets/`. Browser capture requires an additional optional dependency (`python -m pip install playwright`) and Microsoft Edge; it is not needed to run the web application.
+
+## Automatic Sports Image Organization
+
+Below the original single-image classifier, select or drop a collection and click **Organize Images**. The three galleries show the original photo thumbnails, predicted sport, confidence, and category counts. Failed files are listed separately and do not stop the other images. Selecting another collection clears previous results; **Clear collection** releases its local preview URLs.
+
+Limits: **20 files**, **10 MiB per file**, **50 MiB combined**, and **25 million pixels per image**. JPEG, PNG, and WebP still images are accepted. File type, actual decoded format, dimensions, empty/corrupt data, and animation checks use the same classification function as single-image analysis. Unsupported or oversized individual files become per-file errors. Too many files or excessive total size rejects the whole request. Batch requests also have a 51 MiB request-body cap (including multipart overhead), enforced before parsing even for chunked uploads.
+
+**Download Organized ZIP** uploads the same selected originals again, revalidates and reclassifies them with the already-loaded model, and builds a ZIP entirely in memory. There are no stored batches, retention tokens, or client-supplied classification labels. Multipart parsing may use temporary upload files, which are closed after every request. No uploaded image is permanently saved. The browser retains its selected files only for the current page session.
+
+The ZIP contains these folders, including empty categories:
+
+```text
+basketball/
+football/
+tennis/
+```
+
+Each successful file keeps its original bytes. Filenames have a unique input index, a sanitized original stem, and the actual image format's extension (for example, `football/002_match.jpg`). This prevents duplicates from overwriting one another and removes path traversal characters. Failed images are excluded. If every file fails, the gallery displays the errors and ZIP download is disabled; direct ZIP requests return HTTP 422.
+
+### Batch API
+
+- `POST /api/organize`: multipart uploads with repeated `files` fields. Returns `results` in input order, `counts`, `total`, `succeeded`, and `failed`. Every result has `index`, `filename`, and `status`; successes include the normal prediction fields and `archive_path`, while failures include `error`.
+- `POST /api/organize/zip`: same upload fields, returning `application/zip` with attachment filename `sportsvision_organized.zip`. `X-Organized-Count` and `X-Failed-Count` report processing outcomes. No uploaded data is cached.
+
+```powershell
+curl.exe -X POST "http://127.0.0.1:8000/api/organize" -F "files=@C:\photos\match.jpg" -F "files=@C:\photos\court.png"
+curl.exe -X POST "http://127.0.0.1:8000/api/organize/zip" -F "files=@C:\photos\match.jpg" -o organized.zip
+```
+
+### Run the integration tests
+
+Tests call the real model using the photographs in `report_assets/`. No mock inference is used. Start an instance on port 8001:
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8001
+```
+
+In another terminal in the project folder:
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+.\.venv\Scripts\python.exe tests/browser_organization.py
+```
+
+Backend tests use the existing dependencies and Python standard library. Browser tests require the optional Playwright package and Microsoft Edge. Backend tests cover single/batch agreement, all input formats, grouping, original ZIP bytes, safe filenames, duplicates, corrupted/empty/animated/oversized images, dimensions, batch limits, and all-invalid requests. Browser tests cover the original classifier, batch galleries and counts, partial failures, actual downloads, mobile overflow, clearing results, and disabling downloads when all files fail. Browser screenshots and the downloaded test ZIP go to ignored `test_artifacts/`.
