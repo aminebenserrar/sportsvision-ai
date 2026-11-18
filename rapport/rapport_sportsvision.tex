@@ -20,6 +20,8 @@
 \usepackage{hyperref}
 \usepackage{setspace}
 \usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 \usetikzlibrary{arrows.meta,positioning}
 \geometry{left=2.65cm,right=2.45cm,top=2.55cm,bottom=2.45cm}
 \definecolor{marine}{HTML}{176C47}
@@ -273,19 +275,33 @@ Classes&3\\
 \end{table}
 La fonction de perte \emph{Sparse Categorical Crossentropy} convient aux étiquettes entières des trois classes. Le modèle est compilé, puis entraîné avec \texttt{model.fit(train\_ds, validation\_data=valid\_ds, epochs=10)}.
 \section{Évolution de l'entraînement}
-Une époque représente un parcours complet des 491 images d'entraînement. Avec un batch size de 16, une époque comprend 31 lots. Les résultats relevés lors de l'entraînement montrent une progression de l'accuracy et une baisse de la perte : l'accuracy d'entraînement est passée d'environ 76,99\,\% à 100\,\%, et la loss d'environ 0,5741 à 0,0170 en dix époques. La précision de validation a atteint 100\,\% sur seulement 15 images. Les chiffres intermédiaires et les courbes exactes nécessiteraient l'historique complet d'entraînement et ne sont pas reconstitués ici.
-\begin{table}[H]\centering
-\caption{Indicateurs globaux relevés pendant l'entraînement}
-\begin{tabular}{lll}
-\toprule
-\textbf{Indicateur}&\textbf{Début}&\textbf{Fin (époque 10)}\\
-\midrule
-Accuracy d'entraînement&environ 76,99\,\%&100\,\%\\
-Loss d'entraînement&environ 0,5741&environ 0,0170\\
-Accuracy de validation&---&100\,\%\\
-\bottomrule
-\end{tabular}
-\end{table}
+Une époque représente un parcours complet des 491 images d'entraînement. Avec un batch size de 16, une époque comprend 31 lots. Les graphiques suivants utilisent \textbf{les valeurs effectivement affichées dans les sorties des dix époques du notebook original} ; aucune courbe n'est simulée. La validation comporte seulement 15 images, ce qui limite l'interprétation des performances.
+
+\begin{figure}[H]\centering
+\begin{minipage}{0.49\textwidth}\centering
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.65cm,xmin=1,xmax=10,ymin=0.7,ymax=1.04,xtick={1,3,5,7,10},ytick={0.7,0.8,0.9,1.0},xlabel={Époque},ylabel={Accuracy},legend style={font=\tiny,at={(0.98,0.03)},anchor=south east},tick label style={font=\scriptsize},label style={font=\scriptsize},grid=major]
+\addplot+[mark=*,thick,mark size=1.1pt] coordinates {(1,0.7699)(2,0.9857)(3,0.9919)(4,0.9959)(5,1)(6,1)(7,1)(8,1)(9,1)(10,1)};
+\addlegendentry{Entraînement}
+\addplot+[mark=square*,thick,mark size=1.1pt] coordinates {(1,1)(2,1)(3,1)(4,1)(5,1)(6,1)(7,1)(8,1)(9,1)(10,1)};
+\addlegendentry{Validation}
+\end{axis}
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}{0.49\textwidth}\centering
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.65cm,xmin=1,xmax=10,ymin=0,ymax=0.62,xtick={1,3,5,7,10},xlabel={Époque},ylabel={Loss},legend style={font=\tiny,at={(0.98,0.97)},anchor=north east},tick label style={font=\scriptsize},label style={font=\scriptsize},grid=major]
+\addplot+[mark=*,thick,mark size=1.1pt] coordinates {(1,0.5741)(2,0.1421)(3,0.0848)(4,0.0593)(5,0.0456)(6,0.0365)(7,0.0287)(8,0.0234)(9,0.0195)(10,0.0170)};
+\addlegendentry{Entraînement}
+\addplot+[mark=square*,thick,mark size=1.1pt] coordinates {(1,0.1011)(2,0.0301)(3,0.0150)(4,0.0102)(5,0.0080)(6,0.0057)(7,0.0051)(8,0.0040)(9,0.0034)(10,0.0030)};
+\addlegendentry{Validation}
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\caption{Courbes Accuracy et Loss extraites des journaux d'entraînement du notebook Google Colab, dix époques.}
+\end{figure}
+Les valeurs affichées indiquent une amélioration rapide, mais les 100\,\% obtenus en validation et en test concernent des échantillons très restreints.
+
 \section{Évaluation finale}
 L'évaluation finale sur le jeu de test a produit :
 \begin{equation}
@@ -348,6 +364,24 @@ Tennis & 5/5 & 0\\
 \end{table}
 
 L'exactitude de 100\,\% doit être interprétée avec prudence : \textbf{15 images ne suffisent pas} à démontrer la capacité de généralisation du modèle sur de nouveaux matchs, angles de vue et conditions d'éclairage.
+
+\section{Précision, rappel et F1-score}
+À partir des 15 étiquettes réelles et des 15 prédictions enregistrées dans le notebook, chaque classe possède 5 vrais positifs, aucun faux positif et aucun faux négatif. Par conséquent, \emph{Precision}, \emph{Recall} et \emph{F1-score} valent chacun 1,00 sur cet échantillon.
+\begin{table}[H]\centering
+\caption{Métriques par classe calculées sur le jeu de test de 15 images}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Classe}&\textbf{Precision}&\textbf{Recall}&\textbf{F1-score}&\textbf{Support}\\
+\midrule
+Basketball &1,00&1,00&1,00&5\\
+Football &1,00&1,00&1,00&5\\
+Tennis &1,00&1,00&1,00&5\\
+\midrule
+Moyenne macro &1,00&1,00&1,00&15\\
+\bottomrule
+\end{tabular}
+\end{table}
+Il s'agit de résultats descriptifs du petit jeu de test, \textbf{pas d'une garantie de performance sur toutes les nouvelles images}.
 
 \section{Export du modèle}
 Le modèle entraîné a été sauvegardé dans le fichier \texttt{sports\_model.keras}. L'ordre des classes est conservé dans \texttt{labels.json} :
@@ -572,6 +606,9 @@ Le résultat de 100\,\% obtenu sur le jeu de test correspond exactement à 15 pr
 \item \textbf{Confiance non calibrée :} une forte probabilité Softmax ne garantit pas qu'une décision soit correcte.
 \item \textbf{Contexte des photographies :} les arrière-plans ou équipements visibles peuvent influencer la prédiction.
 \end{itemize}
+\section{Aspects éthiques et limites d'utilisation}
+L'application traite des photographies : il convient d'utiliser des images avec les droits appropriés et de respecter la vie privée des personnes photographiées. L'organisation par catégorie n'identifie pas les individus et les fichiers importés ne sont pas stockés durablement par le serveur. Les probabilités de sortie ne constituent pas une preuve certaine : la classification peut se tromper pour des sports non appris ou des images ambiguës. Pour un usage réel, une validation indépendante sur des données plus larges et variées est nécessaire.
+
 \section{Améliorations envisagées}
 Plusieurs prolongements sont possibles : augmenter les données de chaque classe ; créer un jeu de test indépendant plus large ; utiliser des techniques d'augmentation de données ; essayer un ajustement fin de certaines couches de MobileNetV2 ; mesurer la précision et le rappel par classe ; étudier un seuil de rejet pour les images appartenant à d'autres catégories ; enfin, déployer l'application avec des mécanismes adaptés à un usage public.
 \section{Bilan pédagogique}
@@ -621,6 +658,6 @@ Les auteurs doivent être crédités lors de la réutilisation des images incorp
 \bibitem{kaggle} gpiosenka, \emph{Sports Classification}, Kaggle. \url{https://www.kaggle.com/datasets/gpiosenka/sports-classification}.
 \bibitem{fastapi} Documentation FastAPI. \url{https://fastapi.tiangolo.com/}.
 \bibitem{repo} Code source du projet, \emph{SportsVision AI}. \url{https://github.com/aminebenserrar/sportsvision-ai}.
-\bibitem{notebook} Notebook Google Colab du projet, \emph{Entraînement et évaluation de MobileNetV2}. \url{https://colab.research.google.com/drive/1zgeVvl2XZNKWtXm44oMiwRtb2vpyfGwb?usp=sharing}.
+\bibitem{notebookgit} Notebook d'entraînement reproductible dans le dépôt (code original, sorties supprimées pour alléger le fichier). \url{https://github.com/aminebenserrar/sportsvision-ai/blob/main/notebooks/SportsVision_AI_Training.ipynb}.\n\bibitem{notebook} Notebook Google Colab du projet, \emph{Entraînement et évaluation de MobileNetV2}. \url{https://colab.research.google.com/drive/1zgeVvl2XZNKWtXm44oMiwRtb2vpyfGwb?usp=sharing}.
 \end{thebibliography}
 \end{document}
