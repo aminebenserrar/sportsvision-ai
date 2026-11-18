@@ -122,7 +122,7 @@ Le projet \textbf{SportsVision AI} propose un système intelligent de classifica
 
 Le modèle repose sur \textbf{MobileNetV2}, pré-entraîné sur ImageNet et adapté par \emph{Transfer Learning}. L'ensemble d'entraînement contient 491 images ; les ensembles de validation et de test comportent chacun 15 images. Après dix époques, le modèle a classifié correctement les 15 images de test, soit une exactitude de 100\,\%, avec une perte de 0,0215. Ce résultat est encourageant, mais ne prouve pas une fiabilité générale de 100\,\% : l'échantillon de test est très limité.
 
-L'application utilise un serveur \textbf{FastAPI}, le modèle sauvegardé au format Keras ainsi qu'un frontend développé en HTML, CSS et JavaScript. Une API traite les images téléversées, exécute l'inférence et transmet les résultats au navigateur. Des captures réelles de l'application illustrent l'interface, le processus d'upload et les prédictions obtenues.
+L'application utilise un serveur \textbf{FastAPI}, le modèle sauvegardé au format Keras ainsi qu'un frontend développé en HTML, CSS et JavaScript. Une fonction supplémentaire permet de classer plusieurs photographies et de télécharger une archive ZIP organisée par sport. Une API traite les images téléversées, exécute l'inférence et transmet les résultats au navigateur. Des captures réelles de l'application illustrent l'interface, le processus d'upload et les prédictions obtenues.
 
 \textbf{Mots-clés :} Deep Learning ; CNN ; classification d'images ; MobileNetV2 ; Transfer Learning ; TensorFlow ; FastAPI.
 
@@ -445,6 +445,38 @@ L'application refuse les formats non prévus et les fichiers vides. Le frontend 
 \section{Design et ergonomie}
 Le frontend comprend une page d'accueil avec un message de présentation, une zone de dépôt avec glisser-déposer, un aperçu du fichier sélectionné et un panneau de résultat. Après analyse, le sport prédit, le niveau de confiance et les probabilités des trois classes sont affichés. Un encart explique le fonctionnement du CNN et de MobileNetV2. La mise en page s'adapte également aux écrans mobiles.
 
+\section{Organisation automatique de plusieurs images}
+Le cahier des charges prévoit également d'organiser automatiquement les photographies par discipline sportive. Une seconde fonctionnalité a donc été ajoutée à l'application, sans modifier le classifieur initial ni réentraîner MobileNetV2.
+
+L'utilisateur peut sélectionner \textbf{de 1 à 20 images} en une seule opération. Le serveur effectue une prédiction pour chaque fichier et rassemble les photographies dans trois groupes : \emph{Basketball}, \emph{Football} et \emph{Tennis}. Le frontend utilise les fichiers \texttt{organizer.js} et \texttt{organizer.css} pour afficher une galerie de résultats, le nombre de photographies par catégorie et les erreurs éventuelles.
+
+Le backend expose deux nouvelles routes : \texttt{POST /api/organize} pour obtenir les prédictions et les effectifs au format JSON, et \texttt{POST /api/organize/zip} pour télécharger les images classées dans une archive. La structure de téléchargement est la suivante :
+\begin{lstlisting}
+sportsvision_organized.zip
+  basketball/
+  football/
+  tennis/
+\end{lstlisting}
+Les fichiers originaux sont conservés dans l'archive, sans conversion destructive ; les noms sont sécurisés et préfixés pour éviter les collisions. Le traitement accepte des erreurs sur certaines images sans annuler toute l'opération. Les fichiers téléversés ne sont pas enregistrés de manière permanente par la logique de l'application.
+
+Les contrôles prévoient un maximum de \textbf{20 fichiers} par lot et \textbf{50 Mio} au total, avec les restrictions individuelles de format et de taille. Le téléchargement de l'archive est désactivé si aucun fichier n'a pu être classé.
+
+\begin{table}[H]\centering
+\caption{Fonctions ajoutées pour le classement automatique}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Élément} & \textbf{Rôle}\\
+\midrule
+Sélection multiple & Importer plusieurs photographies en une seule fois.\\
+Classification par lots & Réutiliser MobileNetV2 pour chaque image.\\
+Galerie organisée & Regrouper les aperçus par sport prédit.\\
+Compteurs & Afficher le nombre d'images par catégorie.\\
+Export ZIP & Télécharger les originaux dans trois dossiers.\\
+Gestion des erreurs & Conserver les résultats valides malgré un fichier incorrect.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \chapter{Présentation des interfaces et validation fonctionnelle}
 \section{Page d'accueil}
 La page d'accueil présente SportsVision AI et les trois disciplines supportées. Elle permet d'accéder directement à l'espace de classification.
@@ -470,6 +502,9 @@ Une section informative explique la préparation de l'image, le recours à Mobil
 \section{Adaptation aux écrans mobiles}
 L'interface a aussi été capturée dans un navigateur utilisant un viewport de 390$\times$844 pixels, montrant la disposition responsive.
 \photo[0.40]{08_mobile_viewport.png}{Version mobile de l'interface SportsVision AI}
+\section{Vérification de la nouvelle fonctionnalité}
+Le repository contient des scripts de tests pour la classification multiple : \texttt{tests/test\_organization.py} et \texttt{tests/browser\_organization.py}. Ils couvrent notamment le classement par catégorie, la création du ZIP, la gestion des fichiers corrompus et des cas de dépassement de taille. La présence de ces tests dans le code est vérifiée ; leur réussite sur l'environnement de soutenance doit être confirmée lors de l'exécution. Les captures précédentes concernent la classification d'une seule image ; aucune capture de la nouvelle galerie n'est présentée comme déjà réalisée.
+
 \section{Analyse des trois essais de démonstration}
 Les prédictions ci-dessous sont issues de réponses réelles de l'API enregistrées avec les captures. Elles sont indépendantes du calcul d'accuracy sur les 15 images de test et ne constituent pas un échantillon représentatif.
 \begin{table}[H]\centering
@@ -507,7 +542,7 @@ Le projet a permis de mobiliser des connaissances en convolution, ReLU, pooling,
 \chapter{Conclusion générale}
 SportsVision AI illustre une chaîne complète de vision par ordinateur : préparation d'images, entraînement d'un CNN, évaluation, sauvegarde du modèle et intégration dans une application web. Le choix de MobileNetV2 a permis de réutiliser des représentations visuelles pré-entraînées et de limiter le nombre de paramètres à adapter.
 
-Le modèle a obtenu des résultats encourageants sur les données de test disponibles, et l'application développée permet de traiter de véritables photographies de football, basketball et tennis. Néanmoins, la petite taille du jeu de test impose de ne pas assimiler l'exactitude observée de 100\,\% à une fiabilité universelle. Le projet constitue donc un prototype académique fonctionnel, qui pourrait être renforcé par davantage de données, une évaluation approfondie et un élargissement à d'autres sports.
+Le modèle a obtenu des résultats encourageants sur les données de test disponibles, et l'application développée permet de traiter de véritables photographies de football, basketball et tennis. Néanmoins, la petite taille du jeu de test impose de ne pas assimiler l'exactitude observée de 100\,\% à une fiabilité universelle. Le projet constitue donc un prototype académique fonctionnel, désormais doté d'un classement automatique de plusieurs photographies et d'un export ZIP, qui pourrait être renforcé par davantage de données, une évaluation approfondie et un élargissement à d'autres sports.
 
 \appendix
 \chapter{Extraits techniques et utilisation}
