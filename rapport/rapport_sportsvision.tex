@@ -60,6 +60,11 @@
 \IfFileExists{../report_screenshots/#2}{\includegraphics[width=#1\textwidth,height=0.38\textheight,keepaspectratio]{../report_screenshots/#2}}{\fbox{\parbox{0.8\textwidth}{Capture : \texttt{\detokenize{#2}}}}}
 \caption{#3}
 \end{figure}}
+\newcommand{\photomini}[3][0.86]{%
+\begin{figure}[H]\centering
+\IfFileExists{../report_screenshots/#2}{\includegraphics[width=#1\textwidth,height=0.26\textheight,keepaspectratio]{../report_screenshots/#2}}{\fbox{\parbox{0.8\textwidth}{Capture : \texttt{\detokenize{#2}}}}}
+\caption{#3}
+\end{figure}}
 \begin{document}
 \begin{titlepage}
 \thispagestyle{empty}
@@ -483,10 +488,8 @@ La page d'accueil présente SportsVision AI et les trois disciplines supportées
 \photo{01_homepage_viewport.png}{Page d'accueil de SportsVision AI, capture réelle du navigateur}
 \section{Zone de téléversement}
 La zone d'upload accepte la sélection d'un fichier et le glisser-déposer. L'application annonce les formats autorisés et la limite de taille.
-\photo{02_upload.png}{Interface de sélection d'une image sportive}
 \section{Prévisualisation}
 Avant l'analyse, l'utilisateur peut vérifier la photographie sélectionnée. Il peut également retirer l'image pour recommencer.
-\photo{03_image_preview.png}{Prévisualisation de la photographie avant l'analyse}
 \section{Prédiction d'une image de football}
 La capture réelle illustre un exemple correctement classifié comme football, avec une confiance affichée d'environ 91,2\,\%.
 \photo{04_football_prediction.png}{Résultat réel d'une classification de football}
@@ -498,7 +501,6 @@ La troisième démonstration porte sur une photographie de tennis. Le modèle a 
 \photo{06_tennis_prediction.png}{Résultat réel d'une classification de tennis}
 \section{Présentation du modèle dans l'interface}
 Une section informative explique la préparation de l'image, le recours à MobileNetV2 et la restitution des probabilités.
-\photo{07_model_information.png}{Section d'explication du fonctionnement du classifieur}
 \section{Adaptation aux écrans mobiles}
 L'interface a aussi été capturée dans un navigateur utilisant un viewport de 390$\times$844 pixels, montrant la disposition responsive.
 \photo[0.40]{08_mobile_viewport.png}{Version mobile de l'interface SportsVision AI}
@@ -507,21 +509,21 @@ La classification par lots a été démontrée avec trois photographies réelles
 
 \subsection{Sélection de plusieurs photographies}
 La première capture montre les trois fichiers sélectionnés dans la zone d'importation multiple, avant leur analyse. L'interface affiche la quantité et la taille des fichiers sélectionnés.
-\photo[0.86]{09_batch_upload.png}{Importation multiple : trois photographies sélectionnées dans l'application réelle}
+\photomini[0.86]{09_batch_upload.png}{Importation multiple : trois photographies sélectionnées dans l'application réelle}
 
 \subsection{Galerie organisée par discipline}
 La seconde capture présente le résultat de l'inférence : une image de basketball, une de football et une de tennis. Chaque catégorie possède un compteur et montre l'aperçu de sa photographie, la classe prédite et le score de confiance.
-\photo[0.86]{10_organized_gallery.png}{Galerie réelle organisée en Basketball, Football et Tennis, avec compteurs et scores}
+\photomini[0.86]{10_organized_gallery.png}{Galerie réelle organisée en Basketball, Football et Tennis, avec compteurs et scores}
 
 \subsection{Vérification du téléchargement ZIP}
 Le bouton \emph{Download Organized ZIP} permet de récupérer les fichiers originaux répartis dans les trois dossiers. La capture suivante est celle d'un \textbf{panneau de preuve distinct de l'application} : elle montre à gauche le navigateur avec l'application réelle après le téléchargement et à droite le contenu vérifié de l'archive téléchargée. \textbf{Le panneau de droite n'est pas une fonctionnalité intégrée à SportsVision AI.}
-\photo[0.86]{11_zip_download.png}{Preuve de téléchargement : application réelle à gauche et panneau externe de vérification du ZIP à droite}
+\photomini[0.86]{11_zip_download.png}{Preuve de téléchargement : application réelle à gauche et panneau externe de vérification du ZIP à droite}
 
 La vérification de l'archive a confirmé la présence des fichiers \texttt{basketball/001\_basketball.jpg}, \texttt{football/002\_football.jpg} et \texttt{tennis/003\_tennis.jpg}. Leur contenu a été comparé octet par octet aux fichiers d'origine.
 
 \subsection{Interface mobile}
 Le classement automatique a également été testé dans un navigateur avec une zone d'affichage de 390$\times$844 pixels. La capture représente toute la section de classement, sur une hauteur supérieure à celle de l'écran.
-\photo[0.43]{12_batch_mobile.png}{Organisation automatique sur mobile, capture de la section complète}
+\photomini[0.43]{12_batch_mobile.png}{Organisation automatique sur mobile, capture de la section complète}
 
 \subsection{Résultats des tests fonctionnels}
 Les scripts \texttt{tests/test\_organization.py} et \texttt{tests/browser\_organization.py} ont été exécutés sur l'application locale en utilisant le véritable modèle entraîné. Les résultats sont résumés ci-dessous.
