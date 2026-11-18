@@ -1,0 +1,117 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage[margin=1.65cm,top=1.8cm,bottom=1.7cm]{geometry}
+\usepackage{xcolor,enumitem,tabularx,booktabs,microtype,fancyhdr,titlesec,hyperref}
+\definecolor{vert}{HTML}{205E4B}
+\definecolor{gris}{HTML}{505B5B}
+\hypersetup{colorlinks=true,urlcolor=vert}
+\titleformat{\section}{\large\bfseries\color{vert}}{}{0pt}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{vert}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{9pt}{5pt}
+\titlespacing*{\subsection}{0pt}{7pt}{3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small SportsVision AI \textbar{} Fiche de révision}
+\fancyhead[R]{\small Mohamed Amine Bensserrar}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\headheight}{13pt}
+\newcommand{\question}[2]{\noindent\textbf{\color{vert}#1}\par #2\par\vspace{4pt}}
+\begin{document}
+\begin{center}
+{\LARGE\bfseries\color{vert} SportsVision AI}\\[4pt]
+{\large Préparation à la soutenance --- français niveau B1}\\[6pt]
+\textbf{Mohamed Amine Bensserrar}\quad -- \quad 5\textsuperscript{e} année\\
+\small Fiche courte : explication du projet, démonstration et questions-réponses
+\end{center}
+\vspace{-3mm}
+\section{1. Ce que je peux dire à l'oral (texte simple)}
+\textbf{Introduction.} Bonjour. Je m'appelle Mohamed Amine Bensserrar. Aujourd'hui, je présente mon projet de Deep Learning, appelé \textbf{SportsVision AI}. Le but est de reconnaître automatiquement un sport sur une photographie.
+
+\textbf{Problème.} Quand nous avons beaucoup de photos de sport, le classement manuel prend du temps. Notre application identifie le sport et classe les images automatiquement.
+
+\textbf{Données.} J'ai utilisé un dataset de Kaggle avec trois sports : \textbf{basketball, football et tennis}. J'ai \textbf{491 images pour l'entraînement}, \textbf{15 pour la validation} et \textbf{15 pour le test}.
+
+\textbf{Préparation.} Avec Python et TensorFlow, j'ai chargé les images depuis les dossiers. Je les ai redimensionnées en \textbf{224 $\times$ 224 pixels}. J'ai utilisé des groupes de \textbf{16 images}, appelés batches.
+
+\textbf{Modèle.} J'ai choisi \textbf{MobileNetV2}, un CNN déjà pré-entraîné. C'est le \emph{Transfer Learning}. J'ai gardé les couches principales et ajouté une couche pour reconnaître mes trois sports.
+
+\textbf{Entraînement.} J'ai entraîné le modèle dans \textbf{Google Colab}, avec \textbf{Adam}, pendant \textbf{10 époques}. À chaque époque, le modèle apprend avec les images d'entraînement.
+
+\textbf{Résultats.} Le modèle a reconnu correctement les \textbf{15 images du test sur 15}. L'accuracy est donc de \textbf{100\,\% sur ce petit test}. Mais ce résultat ne signifie pas que le modèle sera toujours correct.
+
+\textbf{Application.} J'ai utilisé \textbf{FastAPI} pour le backend et \textbf{HTML, CSS et JavaScript} pour le site. L'utilisateur ajoute une image et voit le sport prédit et son score de confiance. Il peut aussi envoyer plusieurs images, voir les catégories et télécharger un \textbf{ZIP} organisé.
+
+\textbf{Conclusion.} Ce projet m'a permis de comprendre le CNN, le Transfer Learning et l'intégration d'un modèle dans un site web. Pour l'améliorer, je peux ajouter plus de sports et plus d'images de test.
+
+\section{2. Les étapes à retenir}
+\begin{center}
+\small\color{gris}
+Dataset Kaggle $\longrightarrow$ Images 224$\times$224 $\longrightarrow$ MobileNetV2\\[3pt]
+$\longrightarrow$ Entraînement (10 époques) $\longrightarrow$ Test $\longrightarrow$ Site FastAPI
+\end{center}
+\textbf{Mon conseil pour l'oral :} explique chaque étape avec une phrase courte. Ne récite pas le code.
+
+\newpage
+\section{3. Questions probables du professeur (1--10)}
+\question{1. Quel est l'objectif du projet ?}{Reconnaître automatiquement le sport sur une image et organiser les photos par catégorie.}
+\question{2. C'est quoi le Deep Learning ?}{C'est une méthode d'intelligence artificielle qui apprend à partir de données avec des réseaux de neurones.}
+\question{3. C'est quoi un CNN ?}{C'est un réseau de neurones adapté aux images. Il apprend à reconnaître des formes et des caractéristiques visuelles.}
+\question{4. Pourquoi MobileNetV2 ?}{Il est déjà pré-entraîné et il est relativement léger. Je peux donc apprendre plus vite avec peu de données.}
+\question{5. C'est quoi le Transfer Learning ?}{C'est réutiliser un modèle déjà entraîné, puis ajouter ou adapter une partie pour notre nouveau problème.}
+\question{6. Pourquoi trois classes ?}{J'ai choisi football, basketball et tennis pour avoir un premier modèle simple et fonctionnel.}
+\question{7. Quelle est la différence entre Train, Validation et Test ?}{Train sert à apprendre. Validation sert à suivre le modèle pendant l'entraînement. Test sert à l'évaluer à la fin.}
+\question{8. Pourquoi 224 $\times$ 224 ?}{C'est la taille utilisée pour préparer les images avant de les donner au modèle. Toutes les images ont le même format.}
+\question{9. C'est quoi un batch ?}{C'est un groupe d'images traité ensemble. Dans notre projet, un batch contient 16 images.}
+\question{10. C'est quoi une époque ?}{C'est un passage complet sur les images d'entraînement. Notre entraînement contient 10 époques.}
+
+\section{4. Chiffres à mémoriser}
+\begin{center}
+\begin{tabularx}{0.96\linewidth}{@{}Xr@{\qquad}Xr@{}}
+\toprule
+\textbf{Élément} & \textbf{Valeur} & \textbf{Élément} & \textbf{Valeur}\\
+\midrule
+Train & 491 & Validation & 15\\
+Test & 15 & Nombre de sports & 3\\
+Taille & 224 $\times$ 224 & Batch size & 16\\
+Époques & 10 & Accuracy test & 100\,\% (15/15)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\newpage
+\section{5. Questions probables du professeur (11--19)}
+\question{11. C'est quoi l'accuracy ?}{C'est le pourcentage des images bien classées. Ici, 15 sur 15 dans le jeu de test.}
+\question{12. Pourquoi 100\,\% ne prouve pas que le modèle est parfait ?}{Parce que le test contient seulement 15 images. Il faut tester beaucoup plus d'images différentes.}
+\question{13. C'est quoi une matrice de confusion ?}{C'est un tableau qui compare les vraies classes avec les classes prédites. Il montre les bonnes réponses et les erreurs.}
+\question{14. C'est quoi la loss ?}{C'est une valeur qui mesure l'erreur du modèle pendant l'apprentissage. En général, on veut qu'elle diminue.}
+\question{15. C'est quoi Softmax ?}{C'est une fonction qui donne un score pour chaque sport. Le modèle choisit le score le plus élevé.}
+\question{16. À quoi sert FastAPI ?}{FastAPI reçoit l'image du site, utilise le modèle et retourne la prédiction au navigateur.}
+\question{17. Comment fonctionne le classement automatique ?}{L'utilisateur envoie plusieurs images. Le modèle prédit le sport de chaque image. Le site affiche les catégories, puis crée un ZIP avec trois dossiers.}
+\question{18. Quels sont les points faibles du projet ?}{Il y a seulement trois sports. Le test est petit. Une image d'un autre sport peut être mal classée.}
+\question{19. Que ferais-tu pour améliorer le projet ?}{J'ajouterais plus de données, plus de sports et un jeu de test plus grand.}
+
+\section{6. Démonstration rapide du site (environ 1 minute)}
+\begin{enumerate}[leftmargin=*,itemsep=2pt,topsep=2pt]
+\item \textbf{Ouvrir le site :} « Voici notre application SportsVision AI. »
+\item \textbf{Choisir une image :} « Je sélectionne une photo de football. »
+\item \textbf{Afficher le résultat :} « Le modèle prédit football et affiche la confiance. »
+\item \textbf{Importer plusieurs images :} « Ici, je peux classer plusieurs photos en même temps. »
+\item \textbf{Télécharger le ZIP :} « Le ZIP contient les dossiers basketball, football et tennis. »
+\end{enumerate}
+
+\section{7. Trois phrases utiles si je bloque}
+\begin{itemize}[leftmargin=*,itemsep=1pt,topsep=1pt]
+\item « Je vais expliquer cette partie avec un exemple simple. »
+\item « Dans notre projet, nous avons utilisé MobileNetV2 parce qu'il est pré-entraîné. »
+\item « C'est une limite de notre modèle, et nous pouvons l'améliorer avec plus de données. »
+\end{itemize}
+\begin{center}
+\small\color{gris} À retenir : \textbf{dataset $\rightarrow$ préparation $\rightarrow$ CNN $\rightarrow$ entraînement $\rightarrow$ test $\rightarrow$ application.}
+\end{center}
+\end{document}
