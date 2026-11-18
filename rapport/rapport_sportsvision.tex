@@ -503,7 +503,43 @@ Une section informative explique la préparation de l'image, le recours à Mobil
 L'interface a aussi été capturée dans un navigateur utilisant un viewport de 390$\times$844 pixels, montrant la disposition responsive.
 \photo[0.40]{08_mobile_viewport.png}{Version mobile de l'interface SportsVision AI}
 \section{Vérification de la nouvelle fonctionnalité}
-Le repository contient des scripts de tests pour la classification multiple : \texttt{tests/test\_organization.py} et \texttt{tests/browser\_organization.py}. Ils couvrent notamment le classement par catégorie, la création du ZIP, la gestion des fichiers corrompus et des cas de dépassement de taille. La présence de ces tests dans le code est vérifiée ; leur réussite sur l'environnement de soutenance doit être confirmée lors de l'exécution. Les captures précédentes concernent la classification d'une seule image ; aucune capture de la nouvelle galerie n'est présentée comme déjà réalisée.
+La classification par lots a été démontrée avec trois photographies réelles, une de chaque discipline. Les captures suivantes proviennent d'une exécution locale de SportsVision AI avec le modèle MobileNetV2 original ; aucune prédiction factice n'a été introduite.
+
+\subsection{Sélection de plusieurs photographies}
+La première capture montre les trois fichiers sélectionnés dans la zone d'importation multiple, avant leur analyse. L'interface affiche la quantité et la taille des fichiers sélectionnés.
+\photo[0.86]{09_batch_upload.png}{Importation multiple : trois photographies sélectionnées dans l'application réelle}
+
+\subsection{Galerie organisée par discipline}
+La seconde capture présente le résultat de l'inférence : une image de basketball, une de football et une de tennis. Chaque catégorie possède un compteur et montre l'aperçu de sa photographie, la classe prédite et le score de confiance.
+\photo[0.86]{10_organized_gallery.png}{Galerie réelle organisée en Basketball, Football et Tennis, avec compteurs et scores}
+
+\subsection{Vérification du téléchargement ZIP}
+Le bouton \emph{Download Organized ZIP} permet de récupérer les fichiers originaux répartis dans les trois dossiers. La capture suivante est celle d'un \textbf{panneau de preuve distinct de l'application} : elle montre à gauche le navigateur avec l'application réelle après le téléchargement et à droite le contenu vérifié de l'archive téléchargée. \textbf{Le panneau de droite n'est pas une fonctionnalité intégrée à SportsVision AI.}
+\photo[0.86]{11_zip_download.png}{Preuve de téléchargement : application réelle à gauche et panneau externe de vérification du ZIP à droite}
+
+La vérification de l'archive a confirmé la présence des fichiers \texttt{basketball/001\_basketball.jpg}, \texttt{football/002\_football.jpg} et \texttt{tennis/003\_tennis.jpg}. Leur contenu a été comparé octet par octet aux fichiers d'origine.
+
+\subsection{Interface mobile}
+Le classement automatique a également été testé dans un navigateur avec une zone d'affichage de 390$\times$844 pixels. La capture représente toute la section de classement, sur une hauteur supérieure à celle de l'écran.
+\photo[0.43]{12_batch_mobile.png}{Organisation automatique sur mobile, capture de la section complète}
+
+\subsection{Résultats des tests fonctionnels}
+Les scripts \texttt{tests/test\_organization.py} et \texttt{tests/browser\_organization.py} ont été exécutés sur l'application locale en utilisant le véritable modèle entraîné. Les résultats sont résumés ci-dessous.
+\begin{table}[H]\centering
+\caption{Bilan de vérification de la classification multiple}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Vérification} & \textbf{Résultat constaté}\\
+\midrule
+Tests d'intégration backend & 5 réussis, 0 échec.\\
+Tests du navigateur & Réussis ; aucune erreur JavaScript relevée.\\
+Classification multiple & Trois photographies correctement regroupées, une par sport.\\
+Archive ZIP & Dossiers attendus présents ; intégrité et octets originaux vérifiés.\\
+Modèle MobileNetV2 & Poids inchangés ; inférences réelles.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+Les prédictions de ces trois exemples sont des démonstrations fonctionnelles et ne remplacent pas l'évaluation scientifique sur le jeu de test. Les preuves de test et les résultats JSON sont disponibles dans le dossier \texttt{report\_screenshots/} du dépôt GitHub.
 
 \section{Analyse des trois essais de démonstration}
 Les prédictions ci-dessous sont issues de réponses réelles de l'API enregistrées avec les captures. Elles sont indépendantes du calcul d'accuracy sur les 15 images de test et ne constituent pas un échantillon représentatif.
