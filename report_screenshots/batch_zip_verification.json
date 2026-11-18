@@ -1,0 +1,31 @@
+{
+  "archive": "sportsvision_organized_report.zip",
+  "sha256": "40690af28ec90d0e9b4f599996cb107afd14e002b3d63cd9576485d130fbe537",
+  "original_bytes_verified": true,
+  "entries": [
+    {
+      "path": "basketball/",
+      "bytes": 0
+    },
+    {
+      "path": "football/",
+      "bytes": 0
+    },
+    {
+      "path": "tennis/",
+      "bytes": 0
+    },
+    {
+      "path": "basketball/001_basketball.jpg",
+      "bytes": 275529
+    },
+    {
+      "path": "football/002_football.jpg",
+      "bytes": 6378349
+    },
+    {
+      "path": "tennis/003_tennis.jpg",
+      "bytes": 765067
+    }
+  ]
+}

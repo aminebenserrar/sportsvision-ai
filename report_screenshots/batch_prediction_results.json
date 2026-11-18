@@ -1,0 +1,78 @@
+{
+  "results": [
+    {
+      "index": 0,
+      "filename": "basketball.jpg",
+      "status": "success",
+      "archive_path": "basketball/001_basketball.jpg",
+      "predicted_sport": "basketball",
+      "confidence": 0.9895485639572144,
+      "probabilities": [
+        {
+          "sport": "basketball",
+          "probability": 0.9895485639572144
+        },
+        {
+          "sport": "football",
+          "probability": 0.003798465710133314
+        },
+        {
+          "sport": "tennis",
+          "probability": 0.00665300851687789
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "filename": "football.jpg",
+      "status": "success",
+      "archive_path": "football/002_football.jpg",
+      "predicted_sport": "football",
+      "confidence": 0.9118319749832153,
+      "probabilities": [
+        {
+          "sport": "basketball",
+          "probability": 0.06760580092668533
+        },
+        {
+          "sport": "football",
+          "probability": 0.9118319749832153
+        },
+        {
+          "sport": "tennis",
+          "probability": 0.020562201738357544
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "filename": "tennis.jpg",
+      "status": "success",
+      "archive_path": "tennis/003_tennis.jpg",
+      "predicted_sport": "tennis",
+      "confidence": 0.9179620742797852,
+      "probabilities": [
+        {
+          "sport": "basketball",
+          "probability": 0.07436802983283997
+        },
+        {
+          "sport": "football",
+          "probability": 0.007669932208955288
+        },
+        {
+          "sport": "tennis",
+          "probability": 0.9179620742797852
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "basketball": 1,
+    "football": 1,
+    "tennis": 1
+  },
+  "total": 3,
+  "succeeded": 3,
+  "failed": 0
+}
