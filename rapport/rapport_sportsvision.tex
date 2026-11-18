@@ -287,20 +287,63 @@ L'évaluation finale sur le jeu de test a produit :
 \mathrm{Accuracy}_{\mathrm{test}}=100\,\%,\qquad
 \mathrm{Loss}_{\mathrm{test}}=0{,}0215208.
 \end{equation}
-Le modèle a correctement classé les 15 images de test. La matrice de confusion observée est :
-\begin{table}[H]\centering
-\caption{Matrice de confusion sur les 15 images de test}
-\begin{tabular}{lrrr}
+Le modèle a correctement classé les 15 images de test. La matrice de confusion compare la \textbf{classe réelle} (lignes) et la \textbf{classe prédite} (colonnes). Elle permet de visualiser les bonnes prédictions sur la diagonale et les erreurs en dehors de cette diagonale.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\small]
+  % Entêtes des classes prédites
+  \node[font=\bfseries,color=marine] at (3,4.0) {Classe prédite};
+  \foreach \x/\lab in {1/Basketball,2/Football,3/Tennis} {
+    \node[font=\scriptsize] at (\x*1.42,3.40) {\lab};
+  }
+  % Lignes = classes réelles
+  \node[font=\bfseries,color=marine,rotate=90] at (-0.62,1.18) {Classe réelle};
+  \foreach \y/\lab in {1/Basketball,2/Football,3/Tennis} {
+    \pgfmathsetmacro{\yy}{2.76-(\y-1)*1.12}
+    \node[font=\scriptsize,anchor=east] at (0.65,\yy) {\lab};
+  }
+  % Fond de la matrice
+  \foreach \r in {0,1,2} {
+    \foreach \c in {0,1,2} {
+      \pgfmathtruncatemacro{\val}{ifthenelse(\r==\c,5,0)}
+      \pgfmathsetmacro{\xx}{1.42+1.42*\c}
+      \pgfmathsetmacro{\yy}{2.76-1.12*\r}
+      \ifnum\val=5
+        \fill[vert!80] (\xx-0.66,\yy-0.49) rectangle (\xx+0.66,\yy+0.49);
+        \node[white,font=\bfseries\Large] at (\xx,\yy) {\val};
+      \else
+        \fill[pale] (\xx-0.66,\yy-0.49) rectangle (\xx+0.66,\yy+0.49);
+        \node[graytext,font=\Large] at (\xx,\yy) {\val};
+      \fi
+    }
+  }
+  \draw[marine!30] (0.76,0.03) rectangle (4.92,3.25);
+\end{tikzpicture}
+\caption{Matrice de confusion du modèle MobileNetV2 sur les 15 images du jeu de test.}
+\label{fig:confusion}
+\end{figure}
+
+La diagonale contient les trois valeurs \textbf{5, 5 et 5} : les cinq images de basketball, les cinq images de football et les cinq images de tennis ont été correctement classées. Toutes les autres cases valent zéro ; aucune confusion entre les trois sports n'a été observée sur cet échantillon.
+
+\begin{table}[H]
+\centering
+\caption{Lecture des résultats par classe sur le jeu de test}
+\begin{tabular}{lrr}
 \toprule
-\textbf{Classe réelle / Classe prédite}&\textbf{Basketball}&\textbf{Football}&\textbf{Tennis}\\
+\textbf{Classe} & \textbf{Images correctement classées} & \textbf{Erreurs}\\
 \midrule
-Basketball&\textbf{5}&0&0\\
-Football&0&\textbf{5}&0\\
-Tennis&0&0&\textbf{5}\\
+Basketball & 5/5 & 0\\
+Football & 5/5 & 0\\
+Tennis & 5/5 & 0\\
+\midrule
+\textbf{Total} & \textbf{15/15} & \textbf{0}\\
 \bottomrule
 \end{tabular}
 \end{table}
-La diagonale indique les bonnes classifications. Aucune erreur n'a été observée dans ce sous-ensemble précis.
+
+L'exactitude de 100\,\% doit être interprétée avec prudence : \textbf{15 images ne suffisent pas} à démontrer la capacité de généralisation du modèle sur de nouveaux matchs, angles de vue et conditions d'éclairage.
+
 \section{Export du modèle}
 Le modèle entraîné a été sauvegardé dans le fichier \texttt{sports\_model.keras}. L'ordre des classes est conservé dans \texttt{labels.json} :
 \begin{lstlisting}
